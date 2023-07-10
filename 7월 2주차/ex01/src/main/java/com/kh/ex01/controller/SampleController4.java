@@ -11,7 +11,7 @@ public class SampleController4 {
 	// localhost/doE -> localhost/doF로 redirect -> doF.jsp로 forward
 	
 	@RequestMapping(value = "/doE", method = RequestMethod.GET)
-	public String doE(RedirectAttributes rttr) { // 세션처럼 사용할 것
+	public String doE(RedirectAttributes rttr) {
 		rttr.addFlashAttribute("msg", "hello");
 		// 게시판 실습 때 Controller에서 session.setAttribute("msg", "hello")
 		// -> View에서 session.removeAttribute("msg") 했던 것과 같음
