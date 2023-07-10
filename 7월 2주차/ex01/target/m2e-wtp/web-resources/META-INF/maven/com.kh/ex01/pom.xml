@@ -120,12 +120,27 @@
 			<scope>test</scope>
 		</dependency>        
 		
+		<!-- Spring TestContext Framework -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-test</artifactId>
+		    <version>4.1.7.RELEASE</version>
+		    <scope>test</scope>
+		</dependency>
+		
 		<!-- lombok -->
 		<dependency>
 		    <groupId>org.projectlombok</groupId>
 		    <artifactId>lombok</artifactId>
 		    <version>1.18.28</version>
 		    <scope>provided</scope>
+		</dependency>
+		
+		<!-- jackson databind -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.5.4</version>
 		</dependency>
 		
 	</dependencies>
