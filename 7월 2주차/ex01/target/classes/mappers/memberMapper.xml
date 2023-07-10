@@ -5,7 +5,30 @@
 
 <mapper namespace="com.kh.ex01.memberMapper">
 	<!-- com.kh.ex01.memberMapper.getTime -->
+	<!-- 실행할 쿼리문장 작성 -->
 	<select id="getTime" resultType="string">
-		select to_char(sysdate) from dual
+		select to_char(sysdate, 'RRRR/MM/DD HH24:MI:SS') from dual
+	</select>
+	
+	<!-- vo의 createMember -->
+	<insert id="insertMember" parameterType="com.kh.ex01.vo.MemberVo">
+	<!-- parameterType은 생략해도 됨(파라미터명을 동일하게 작성해야 함) -->
+		insert into tbl_member(userid, userpw, username, email)
+		values
+			(#{userid}, #{userpw}, #{username}, #{email, jdbcType=VARCHAR})
+		<!-- com.kh.ex01.vo.MemberVo.userid -->
+		<!-- jdbcType : null값으로 들어왔을 때 처리할 타입을 작성 -->
+	</insert>
+	
+	<!-- readMember -->
+	<select id="selectMember" resultType="com.kh.ex01.vo.MemberVo">
+		select * from tbl_member 
+		where userid = #{userid}
+	</select>
+	
+	<!-- readWithPw -->
+	<select id="selectMemberWithPw" resultType="com.kh.ex01.vo.MemberVo">
+		select * from tbl_member
+		where userid = #{userid} and userpw = #{userpw}
 	</select>
 </mapper>

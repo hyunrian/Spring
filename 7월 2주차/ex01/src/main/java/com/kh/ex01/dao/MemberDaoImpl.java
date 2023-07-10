@@ -25,22 +25,29 @@ public class MemberDaoImpl implements MemberDao {
 
 	@Override
 	public void createMember(MemberVo vo) throws Exception {
-		
+		int count = sqlSession.insert(NAMESPACE + "insertMember", vo);
+		// vo를 memverMapper.xml에 넘겨줘야함
+		// memberMapper.xml에 넘겨줘야할 파라미터타입이 있는 경우 insert(string, object) 사용
+		System.out.println("count:" + count);
 	}
 
 	@Override
 	public MemberVo readMember(String userid) throws Exception {
+		MemberVo memberVo = sqlSession.selectOne(
+				NAMESPACE + "selectMember", userid);
 		
-		
-		return null;
+		return memberVo;
 	}
 
 	@Override
 	public MemberVo readWithPw(String userid, String userpw) 
 			throws Exception {
-		
-		
-		return null;
+		MemberVo memberVo = new MemberVo();
+		memberVo.setUserid(userid);
+		memberVo.setUserpw(userpw);
+		memberVo = sqlSession.selectOne(
+				NAMESPACE + "selectMemberWithPw", memberVo);
+		return memberVo;
 	}
 
 	
