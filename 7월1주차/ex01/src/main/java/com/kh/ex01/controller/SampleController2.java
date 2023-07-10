@@ -14,6 +14,7 @@ public class SampleController2 {
 	@RequestMapping(value = "/doC", method = RequestMethod.GET)
 	public String doC(@ModelAttribute("msg") String msg) { 
 		// getparameter를 통해 "msg"로 저장된 값을 얻고 메서드 내에서는 변수명 msg로 사용
+		// url에 doC?msg=xxx로 값 설정
 		// view까지 자동으로 전송해줌
 		System.out.println("msg:" + msg);
 		return "doC";
