@@ -41,7 +41,9 @@ public class BoardDaoTest {
 	@Test
 	public void testListAll() throws Exception {
 		List<BoardVo> list = boardDao.listAll();
-//		System.out.println(list);
+		for (BoardVo boardVo : list) {
+			System.out.println(boardVo);
+		}
 	}
 	
 	@Test
