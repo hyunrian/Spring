@@ -4,6 +4,10 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.kh.ex02.BoardMapper">
+	<!-- 
+		namespace 값은 다른 mapper와 겹치지 않는 이름으로 지어주면 됨.
+		sql 쿼리 id가 중복될 때 namespace로 구분하는 용도
+	 -->
 	<!-- 글쓰기 -->
 	<insert id="create">
 		insert into tbl_board (bno, title, content, writer)
