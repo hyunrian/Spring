@@ -2,23 +2,39 @@ package com.kh.ex02.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.kh.ex02.dao.BoardDao;
 import com.kh.ex02.vo.BoardVo;
+import com.kh.ex02.vo.PagingDto;
 
-public interface BoardService {
+@Service // 서비스에 붙이는 애너테이션
+public class BoardService {
+	
+	@Autowired
+	private BoardDao boardDao;
 
-	// 글 작성
-	public void create(BoardVo boardVo) throws Exception;
-	
-	// 글 전체 조회
-	public List<BoardVo> listAll() throws Exception;
-	
-	// 특정 글 1개 조회
-	public BoardVo read(int bno) throws Exception; 
-	
-	// 글 수정
-	public void update(BoardVo boardVo) throws Exception;
-	
-	// 글 삭제
-	public void delete(int bno) throws Exception;
-	
+	public void create(BoardVo boardVo) throws Exception {
+		boardDao.create(boardVo);
+	}
+
+	public List<BoardVo> listAll(PagingDto pagingDto) throws Exception {
+		List<BoardVo> list = boardDao.listAll(pagingDto);
+		return list;
+	}
+
+	public BoardVo read(int bno) throws Exception {
+		BoardVo boardVo = boardDao.read(bno);
+		return boardVo;
+	}
+
+	public void update(BoardVo boardVo) throws Exception {
+		boardDao.update(boardVo);
+	}
+
+	public void delete(int bno) throws Exception {
+		boardDao.delete(bno);
+	}
+
 }

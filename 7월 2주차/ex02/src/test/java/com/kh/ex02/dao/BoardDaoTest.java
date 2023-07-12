@@ -28,13 +28,15 @@ public class BoardDaoTest {
 	} 
 	
 	@Test
-	public void testCreate2() throws Exception {
-		for (int i = 2; i <= 10; i++) {
+	public void testCreate500() throws Exception {
+		for (int i = 1; i <= 500; i++) {
 			BoardVo vo = new BoardVo();
 			vo.setTitle("제목-" + i);
 			vo.setContent("내용-" + i);
-			vo.setWriter("홍길동");
+			vo.setWriter("작성자-" + i);
 			boardDao.create(vo);
+			System.out.println(vo);
+			Thread.sleep(100);
 		} 
 	}
 	

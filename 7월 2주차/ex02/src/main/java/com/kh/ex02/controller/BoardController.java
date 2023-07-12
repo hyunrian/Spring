@@ -7,10 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.ex02.service.BoardService;
 import com.kh.ex02.vo.BoardVo;
+import com.kh.ex02.vo.PagingDto;
 
 @Controller
 @RequestMapping("/board") 
@@ -40,8 +42,17 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String list(Model model) throws Exception {
-		List<BoardVo> list = boardService.listAll();
+	public String list(
+			@RequestParam(value = "page", defaultValue = "1") int page, 
+			Model model) throws Exception { 
+		// @RequestParam은 생략해도 가능. 가독성을 위해 사용
+		// value값이 넘어오지 않았다면 defaultValue 적용
+		System.out.println("page:" + page);
+		PagingDto pagingDto = new PagingDto();
+		pagingDto.setPage(page);
+		pagingDto.calc();
+		System.out.println("pagingDto:" + pagingDto);
+		List<BoardVo> list = boardService.listAll(pagingDto);
 		model.addAttribute("list", list);
 		return "board/list";
 	}

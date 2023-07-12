@@ -7,8 +7,23 @@
 $(function() {
 	var msg = "${msg}";
 	if (msg == "SUCCESS") alert("처리가 완료되었습니다.");
+	
+	$(".page-link").click(function(e) {
+		e.preventDefault(); // a태그의 동작을 막음
+		var page = $(this).attr("href");
+		location.href="/board/list?page=" + page;
+	});
 });
 </script>
+<style>
+	ul.pagination {
+		margin-left: 600px;
+		margin-right: auto;
+	}
+	li.page-item {
+ 		display:block;	 
+	}
+</style>
 
 <div class="container-fluid">
 	<div class="row">
@@ -44,6 +59,27 @@ $(function() {
 			</table>
 		</div>
 	</div>
+		</div>
+	</div>
+	
+	<!-- 페이징 -->
+	<div class="row">
+		<div class="col-md-12">
+			<nav>
+				<ul class="pagination justtify-content-center">
+					<li class="page-item">
+						<a class="page-link" href="#">&laquo;</a>
+					</li>
+					<c:forEach var="v" begin="1" end="10">
+						<li class="page-item">
+							<a class="page-link" href="${v}">${v}</a>
+						</li>
+					</c:forEach>
+					<li class="page-item">
+						<a class="page-link" href="#">&raquo;</a>
+					</li>
+				</ul>
+			</nav>
 		</div>
 	</div>
 </div>	
