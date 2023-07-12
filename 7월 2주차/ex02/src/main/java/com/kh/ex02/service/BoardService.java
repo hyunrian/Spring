@@ -36,5 +36,9 @@ public class BoardService {
 	public void delete(int bno) throws Exception {
 		boardDao.delete(bno);
 	}
+	
+	public int getCount() throws Exception {
+		return boardDao.getCount();
+	}
 
 }

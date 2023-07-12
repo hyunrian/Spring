@@ -68,15 +68,26 @@ $(function() {
 			<nav>
 				<ul class="pagination justtify-content-center">
 					<li class="page-item">
-						<a class="page-link" href="#">&laquo;</a>
+						<c:if test="${pagingDto.startPage != 1}">
+							<a class="page-link" href="${pagingDto.startPage - 1}">&laquo;</a>
+						</c:if>
 					</li>
-					<c:forEach var="v" begin="1" end="10">
-						<li class="page-item">
-							<a class="page-link" href="${v}">${v}</a>
-						</li>
+					<c:forEach var="v" begin="${pagingDto.startPage}" end="${pagingDto.endPage}">
+						<c:choose>
+							<c:when test="${pagingDto.page == v}">
+								<li class="page-item active">
+							</c:when>
+							<c:otherwise>
+								<li class="page-item">
+							</c:otherwise>
+						</c:choose>
+						<a class="page-link" href="${v}">${v}</a>
+					</li>
 					</c:forEach>
 					<li class="page-item">
-						<a class="page-link" href="#">&raquo;</a>
+						<c:if test="${pagingDto.endPage < pagingDto.totalPage}">
+							<a class="page-link" href="${pagingDto.endPage + 1}">&raquo;</a>
+						</c:if>
 					</li>
 				</ul>
 			</nav>

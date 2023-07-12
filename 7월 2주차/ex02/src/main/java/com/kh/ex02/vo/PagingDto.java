@@ -13,23 +13,45 @@ public class PagingDto {
 	private int perPage = 10; 	// 한 페이지 당 게시글 수(게시글 n개씩 보기)
 	private int totalCount; 	// 전체 데이터 개수
 	private int totalPage; 		// 전체 페이지 수
+	private final int PAGE_BLOCK_COUNT = 10; 
 	
-	public void setPage(int page) {
+	public PagingDto(int page, int count) {
 		this.page = page;
-	}
-	
-	public void setTotalCount(int totalCount) {
-		this.totalCount = totalCount;
+		this.totalCount = count;
+		calc();
 	}
 	
 	public void setPerPage(int perPage) {
 		this.perPage = perPage;
 	}
 	
+	public int getStartPage() {
+		return startPage;
+	}
+	
+	public int getEndPage() {
+		return endPage;
+	}
+	
+	public int getTotalPage() {
+		return totalPage;
+	}
+	
+	public int getPage() {
+		return page;
+	}
+	
 	public void calc() {
 		this.endRow = this.page * this.perPage;
 		this.startRow = this.endRow - (this.perPage - 1);
+		
+		endPage = (int)(Math.ceil(page / (double)PAGE_BLOCK_COUNT)) * PAGE_BLOCK_COUNT;
+		startPage = endPage - (PAGE_BLOCK_COUNT - 1);
+		
+		totalPage = (int)Math.ceil(totalCount / (double)perPage);
+		if (endPage > totalPage) {
+			endPage = totalPage;
+		}
 	}
-	
 
 }

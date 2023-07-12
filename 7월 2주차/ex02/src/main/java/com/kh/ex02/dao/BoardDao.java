@@ -39,5 +39,10 @@ public class BoardDao {
 	public void delete(int bno) throws Exception {
 		sqlSession.delete(NAMESPACE + "delete", bno);
 	}
+	
+	public int getCount() throws Exception {
+		int count = sqlSession.selectOne(NAMESPACE + "getCount");
+		return count;
+	}
 
 }
