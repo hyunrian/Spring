@@ -37,8 +37,8 @@ public class BoardService {
 		boardDao.delete(bno);
 	}
 	
-	public int getCount() throws Exception {
-		return boardDao.getCount();
+	public int getCount(PagingDto pagingDto) throws Exception {
+		return boardDao.getCount(pagingDto);
 	}
 
 }

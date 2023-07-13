@@ -48,10 +48,12 @@ public class BoardController {
 		// @RequestParam은 생략해도 가능. 가독성을 위해 사용
 		// value값이 넘어오지 않았다면 defaultValue 적용
 		
-		int count = boardService.getCount();
+		int count = boardService.getCount(pagingDto);
 		
+		System.out.println("pagingDto:" + pagingDto);
 		pagingDto = new PagingDto(
-				pagingDto.getPage(), pagingDto.getPerPage(), count);
+				pagingDto.getPage(), pagingDto.getPerPage(), count, 
+				pagingDto.getSearchType(), pagingDto.getKeyword());
 		System.out.println("pagingDto:" + pagingDto);
 		List<BoardVo> list = boardService.listAll(pagingDto);
 		model.addAttribute("list", list);

@@ -11,14 +11,22 @@ $(function() {
 	$(".page-link").click(function(e) {
 		e.preventDefault(); // a태그의 동작을 막음
 		var page = $(this).attr("href");
-		location.href="/board/list?page=" + page 
-				+ "&perPage=${pagingDto.perPage}";
+		$("input[name=page]").val(page); // input 중 name이 page인 것의 값을 page로 변경
+		// 검색결과가 총 2페이지가 나왔을 때 1페이지에서 2페이지로 이동 시 바뀐 page를 반영하기 위함 
+		var form = $("#frmPaging");
+		form.submit();
 	});
 	
 	$("#perPage").change(function() { <%-- 값이 바뀔 때 --%>
 		var perPage = $(this).val();
 		console.log("perPage:", perPage);
 		location.href="/board/list?perPage=" + perPage;
+	});
+	
+	$("#btnSearch").click(function() {
+		var searchType = $("#searchType").val();
+		var keyword = $("#keyword").val();
+		location.href="/board/list?searchType=" + searchType + "&keyword=" + keyword;
 	});
 });
 </script>
@@ -32,6 +40,14 @@ $(function() {
 	}
 </style>
 
+<!-- 각 페이지 링크에 파라미터 설정(어떤 조건이든 페이징이 잘 되도록 하기 위함) -->
+<form id="frmPaging" action="/board/list" method="get">
+	<input type="hidden" name="page" value="${pagingDto.page}">
+	<input type="hidden" name="perPage" value="${pagingDto.perPage}">
+	<input type="hidden" name="searchType" value="${pagingDto.searchType}">
+	<input type="hidden" name="keyword" value="${pagingDto.keyword}">
+</form>
+
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
@@ -43,7 +59,7 @@ $(function() {
 			
 			<div class="row" style="margin-bottom:30px;">
 				<!-- n줄씩 보기 -->
-				<div class="col-md-6">
+				<div class="col-md-2">
 					<select name="perPage" id="perPage">
 						<c:forEach var="v" begin="5" end="30" step="5">
 							<option value="${v}"
@@ -56,9 +72,40 @@ $(function() {
 				</div>
 					
 				<!-- 검색 -->
-				<div class="col-md-6"></div>
+				<div class="col-md-10">
+					<select name="searchType" id="searchType">
+						<option value="t"
+							<c:if test="${pagingDto.searchType == 't'}">
+								selected
+							</c:if>
+						>제목</option>
+						<option value="c"
+							<c:if test="${pagingDto.searchType == 'c'}">
+								selected
+							</c:if>
+						>내용</option>
+						<option value="w"
+							<c:if test="${pagingDto.searchType == 'w'}">
+								selected
+							</c:if>
+						>작성자</option>
+						<option value="tc"
+							<c:if test="${pagingDto.searchType == 'tc'}">
+								selected
+							</c:if>
+						>제목+내용</option>
+						<option value="tcw"
+							<c:if test="${pagingDto.searchType == 'tcw'}">
+								selected
+							</c:if>
+						>제목+내용+작성자</option>
+					</select>
+					<input type="text" name="keyword" id="keyword" 
+						value="${pagingDto.keyword}">
+					<button type="button" id="btnSearch">검색</button>
+				</div>
 				
-			</div>			
+			</div>
 			
 			<!-- 게시글 목록 -->
 			<div class="row">
@@ -120,7 +167,7 @@ $(function() {
 				</ul>
 			</nav>
 		</div>
-	</div>
+	</div><!-- /페이징 -->
 </div>	
 
 <%@ include file="/WEB-INF/views/include/footer.jsp" %>

@@ -16,11 +16,16 @@ public class PagingDto {
 	private int totalCount; 	// 전체 데이터 개수
 	private int totalPage; 		// 전체 페이지 수
 	private final int PAGE_BLOCK_COUNT = 10; 
+	private String searchType;
+	private String keyword;
 	
-	public PagingDto(int page, int perPage, int count) {
+	public PagingDto(int page, int perPage, 
+			int count, String searchType, String keyword) {
 		this.page = page;
 		this.perPage = perPage;
 		this.totalCount = count;
+		this.searchType = searchType;
+		this.keyword = keyword;
 		calc();
 	}
 	

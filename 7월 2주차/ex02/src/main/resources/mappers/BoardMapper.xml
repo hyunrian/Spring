@@ -19,8 +19,8 @@
 	<select id="listAll" resultType="BoardVo">
 		select * 
 		from (select rownum rnum, a.*
-		      from (select * 
-		            from tbl_board 
+		      from (select * from tbl_board 
+					<include refid="search"/>
 		            order by bno desc) a)
 		where rnum between #{startRow} and #{endRow}
 	</select>
@@ -28,7 +28,35 @@
 	<!-- 페이징 - 전체 글 개수 -->
 	<select id="getCount" resultType="int">
 		select count(*) from tbl_board
+		<include refid="search"/>
 	</select>
+	
+	<!-- 검색 조건 -->
+	<sql id="search">
+	 <if test="keyword != null">
+		<choose>
+       		<when test="searchType == 't'.toString()"> 
+       		<!-- 여기서 ''안에 문자를 쓰면 char처리됨 -> toString() 필요 -->
+         	 	where title like '%' || #{keyword} || '%'
+       		</when>
+       		<when test="searchType == 'c'.toString()">
+         	 	where content like '%' || #{keyword} || '%'
+       		</when>
+       		<when test="searchType == 'w'.toString()">
+          		where writer like '%' || #{keyword} || '%'
+       		</when>
+       		<when test="searchType == 'tc'.toString()">
+				where title like '%' || #{keyword} || '%'
+				or content like '%' || #{keyword} || '%'
+       		</when>
+       		<when test="searchType == 'tcw'.toString()">
+				where title like '%' || #{keyword} || '%'
+				or content like '%' || #{keyword} || '%'
+				or writer like '%' || #{keyword} || '%'
+       		</when>
+       	</choose>
+       	</if>
+	</sql>
 		
 	<!-- 특정글 조회 -->
 	<select id="read" resultType="BoardVo">

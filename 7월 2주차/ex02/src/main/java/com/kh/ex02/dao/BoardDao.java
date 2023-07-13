@@ -40,8 +40,8 @@ public class BoardDao {
 		sqlSession.delete(NAMESPACE + "delete", bno);
 	}
 	
-	public int getCount() throws Exception {
-		int count = sqlSession.selectOne(NAMESPACE + "getCount");
+	public int getCount(PagingDto pagingDto) throws Exception {
+		int count = sqlSession.selectOne(NAMESPACE + "getCount", pagingDto);
 		return count;
 	}
 
