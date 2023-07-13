@@ -11,15 +11,31 @@ $(function() {
 		$("#btnModifyFinish").fadeIn(1000);
 		$(this).fadeOut(1000);
 	});
+	
+	$(".goToList").click(function(e) {
+		e.preventDefault();
+		if (${pagingDto != null}) {
+			$("input[name=page]").val("${pagingDto.page}");
+			$("input[name=perPage]").val("${pagingDto.perPage}");
+			$("input[name=searchType]").val("${pagingDto.searchType}");
+			$("input[name=keyword]").val("${pagingDto.keyword}");
+			var form = $("#frmPaging");
+			form.submit();
+		} else {
+			location.href="/board/list";
+		}
+	});
 });
 </script>
+<%@ include file="/WEB-INF/views/include/frmPaging.jsp" %>
 
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="jumbotron">
 				<h2>글 상세보기</h2><br>
-				<p><a href="/board/list" class="btn btn-success">글 목록으로 이동</a></p>
+<!-- 				<p><a href="/board/list" class="btn btn-success">글 목록으로 이동</a></p> -->
+				<p><a class="btn btn-success goToList">글 목록으로 이동</a></p>
 				<%-- a링크로 이동 : get방식 --%>
 			</div>
 			<form role="form" action="/board/mod" method="post">

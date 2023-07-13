@@ -19,6 +19,8 @@ import com.kh.ex02.vo.PagingDto;
 // 클래스에 전체 경로 지정. 클래스 내 메서드에 지정한 requestmapping은 /board/xxx로 지정됨
 public class BoardController {
 	
+	PagingDto tempDto = null;
+	
 	@Autowired
 	private BoardService boardService;
 	
@@ -54,6 +56,7 @@ public class BoardController {
 		pagingDto = new PagingDto(
 				pagingDto.getPage(), pagingDto.getPerPage(), count, 
 				pagingDto.getSearchType(), pagingDto.getKeyword());
+		tempDto = pagingDto;
 		System.out.println("pagingDto:" + pagingDto);
 		List<BoardVo> list = boardService.listAll(pagingDto);
 		model.addAttribute("list", list);
@@ -66,19 +69,31 @@ public class BoardController {
 			Model model) throws Exception { // spring이 파라미터 값 자동으로 가져와줌 
 		BoardVo boardVo = boardService.read(bno);
 		model.addAttribute("boardVo", boardVo);
+		System.out.println("pagingDto in read:" + tempDto);
+		model.addAttribute("pagingDto", tempDto);
 		return "board/read";
 	}
 	
+	// 수정
 	@RequestMapping(value = "/mod", method = RequestMethod.POST)
 	public String update(BoardVo boardVo) throws Exception {
 		boardService.update(boardVo);
 		return "redirect:/board/read?bno=" + boardVo.getBno();
 	}
 	
+	// 삭제
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String delete(int bno) throws Exception {
+		System.out.println("pagingDto in delete:" + tempDto);
 		boardService.delete(bno);
-		return "redirect:/board/list";
+		if (tempDto != null) {
+			return "redirect:/board/list?page=" + tempDto.getPage() 
+			+ "&perPage=" + tempDto.getPerPage()
+			+ "&searchType=" + tempDto.getSearchType()
+			+ "&keyword=" + tempDto.getKeyword();
+		} else {
+			return "board/list";
+		}
 	}
 
 }

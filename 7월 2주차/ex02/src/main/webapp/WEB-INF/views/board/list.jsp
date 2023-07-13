@@ -17,6 +17,18 @@ $(function() {
 		form.submit();
 	});
 	
+	// 수정, 삭제 후 목록으로 가면 보던 페이지 유지 - 수업 때 한 방법
+	// form 태그로 파라미터를(전달할 데이터 전체) 다음 페이지로 전달
+	// 내가 했던 방식과 차이를 보려면 드라이브에 업로드된 파일 참고
+// 	$(".a_title").click(function(e) { 
+// 		e.preventDefault();
+// 		alert("ddd");
+// 		var bno = $(this).attr("href");
+// 		$("input[name=bno]").val(bno);
+// 		$("#frmPaging").attr("action", "/board/read");
+// 		$("#frmPaging").submit();
+// 	});
+	
 	$("#perPage").change(function() { <%-- 값이 바뀔 때 --%>
 		var perPage = $(this).val();
 		console.log("perPage:", perPage);
@@ -28,6 +40,7 @@ $(function() {
 		var keyword = $("#keyword").val();
 		location.href="/board/list?searchType=" + searchType + "&keyword=" + keyword;
 	});
+	<%-- 여기에 쓰다 만 코드가 있어서 script 내 함수가 제대로 작동하지 않는 에러가 있었음 --%>
 });
 </script>
 <style>
@@ -41,12 +54,8 @@ $(function() {
 </style>
 
 <!-- 각 페이지 링크에 파라미터 설정(어떤 조건이든 페이징이 잘 되도록 하기 위함) -->
-<form id="frmPaging" action="/board/list" method="get">
-	<input type="hidden" name="page" value="${pagingDto.page}">
-	<input type="hidden" name="perPage" value="${pagingDto.perPage}">
-	<input type="hidden" name="searchType" value="${pagingDto.searchType}">
-	<input type="hidden" name="keyword" value="${pagingDto.keyword}">
-</form>
+
+<%@ include file="/WEB-INF/views/include/frmPaging.jsp" %>
 
 <div class="container-fluid">
 	<div class="row">
@@ -125,6 +134,7 @@ $(function() {
 								<tr>
 									<td>${boardVo.bno}</td>
 									<td><a href="/board/read?bno=${boardVo.bno}">${boardVo.title}</a></td>
+<%-- 									<td><a class="a_title" href="${boardVo.bno}">${boardVo.title}</a></td> --%>
 									<td>${boardVo.writer}</td>
 									<td>${boardVo.regdate}</td>
 									<td>${boardVo.viewcnt}</td>
