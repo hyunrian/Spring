@@ -35,6 +35,7 @@ public class ReplyController {
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public String insert(@RequestBody ReplyVo replyVo) {
 		// JSON타입 등으로 들어오는 데이터 -> RequestBody 사용
+		System.out.println("replyVo:" + replyVo);
 		replyService.insert(replyVo);
 		return "success";
 	}
@@ -50,7 +51,7 @@ public class ReplyController {
 	
 	// 삭제
 	@RequestMapping(value = "/delete/{rno}", method = RequestMethod.DELETE)
-	public String delete(@PathVariable int rno) {
+	public String delete(@PathVariable("rno") int rno) {
 		replyService.delete(rno);
 		return "success";
 	}

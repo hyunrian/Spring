@@ -22,8 +22,8 @@ public class ReplyDaoTest {
 	public void testInsert() {
 		ReplyVo vo = new ReplyVo();
 		vo.setBno(501);
-		vo.setReplytext("댓글 테스트");
-		vo.setReplyer("끼끼");
+		vo.setReplytext("괌 가야지");
+		vo.setReplyer("우끼");
 		replyDao.insert(vo);
 	}
 	

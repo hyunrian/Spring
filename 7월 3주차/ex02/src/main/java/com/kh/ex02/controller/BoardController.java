@@ -52,12 +52,12 @@ public class BoardController {
 		
 		int count = boardService.getCount(pagingDto);
 		
-		System.out.println("pagingDto:" + pagingDto);
+//		System.out.println("pagingDto:" + pagingDto);
 		pagingDto = new PagingDto(
 				pagingDto.getPage(), pagingDto.getPerPage(), count, 
 				pagingDto.getSearchType(), pagingDto.getKeyword());
 		tempDto = pagingDto;
-		System.out.println("pagingDto:" + pagingDto);
+//		System.out.println("pagingDto:" + pagingDto);
 		List<BoardVo> list = boardService.listAll(pagingDto);
 		model.addAttribute("list", list);
 		model.addAttribute("pagingDto", pagingDto);
@@ -69,7 +69,7 @@ public class BoardController {
 			Model model) throws Exception { // spring이 파라미터 값 자동으로 가져와줌 
 		BoardVo boardVo = boardService.read(bno);
 		model.addAttribute("boardVo", boardVo);
-		System.out.println("pagingDto in read:" + tempDto);
+//		System.out.println("pagingDto in read:" + tempDto);
 		model.addAttribute("pagingDto", tempDto);
 		return "board/read";
 	}
@@ -84,7 +84,7 @@ public class BoardController {
 	// 삭제
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String delete(int bno) throws Exception {
-		System.out.println("pagingDto in delete:" + tempDto);
+//		System.out.println("pagingDto in delete:" + tempDto);
 		boardService.delete(bno);
 		if (tempDto != null) {
 			return "redirect:/board/list?page=" + tempDto.getPage() 
