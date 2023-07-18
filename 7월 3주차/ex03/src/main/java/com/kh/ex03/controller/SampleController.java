@@ -3,6 +3,8 @@ package com.kh.ex03.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,6 +47,21 @@ public class SampleController {
 		}
 		return list;
 	}
+	
+	//ResponseEntity 사용해보기 (코드 변경)
+	/*
+	@RequestMapping(value = "/json-list", method = RequestMethod.GET)
+	public ResponseEntity<List<SampleVo>> jsonList() {
+		List<SampleVo> list = new ArrayList<>();
+		for (int i = 1; i <= 10; i++) {
+			SampleVo vo = new SampleVo();
+			vo.setName("버즈-" + i);
+			vo.setPrice(10000 + i);
+			list.add(vo);
+		}
+		return new ResponseEntity<List<SampleVo>>(list, HttpStatus.NOT_FOUND);
+	}
+	*/
 	
 	
 	
