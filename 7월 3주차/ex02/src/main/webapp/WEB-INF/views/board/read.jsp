@@ -69,17 +69,24 @@ $(function() {
 // 		$.post(url, sData, function(rData) {
 // 			console.log(rData);
 			// 보내는 데이터 형식이 json인 것을 지정해줄 수 없어서 동작하지 않음
+			// $.post / $.get은 form-data 형식으로만 데이터를 보낼 수 있음
 // 		});
 
+		/*
+			웹?html?의 기본 구조가 header와 body로 나누어지는데
+			header에서 컨텐트타입 등의 정의가 들어감
+		*/	
 		$.ajax({
 			"type" : "post",
 			"url" : url,
 			"headers" : {
 				"Content-Type" : "application/json",
 				"X-HTTP-Method-Override" : "post"
+				// "X-HTTP-Method-Override"가 없어도 크롬에서는 동작하지만
+				// 모든 브라우저에서 다 가능한 것은 아님 -> 작성하는 것이 좋음 
 			},
 			"dataType" : "text",
-			"data" : JSON.stringify(sData),
+			"data" : JSON.stringify(sData), // json데이터를 문자열로 변경
 			"success" : function(rData) {
 				console.log(rData);
 				if (rData == "success") {
@@ -90,6 +97,37 @@ $(function() {
 			}
 		});
 	});
+	
+// 	$(".btn-reply-update").click(function() {
+// 		console.log("update clicked");
+// 	}); 
+	// 로딩되기 전에 여기 부분을 읽는데, 그 때는 처음 tr이 아닌 나머지 tr의 btn-reply-update 버튼을 
+	// 찾을 수 없기 때문에 상위 엘리먼트를 기준으로 찾아야 함
+
+	$("#replyList").on("click", ".btn-reply-update", function() {
+// 		console.log("update");
+	});
+	
+	$("#replyList").on("click", ".btn-reply-delete", function() {
+// 		console.log("delete");
+		var rno = $(this).parent().parent().find("td").eq(0).text();
+		console.log(rno);
+		let url = "/reply/delete";
+		let sData = {"rno" : rno};
+		
+		$.ajax({
+			"type" : "delete",
+			"url" : url,
+// 			"dataType" : "text",
+// 			"data" : JSON.stringify(sData), // json데이터를 문자열로 변경
+			"data" : sData,
+			"success" : function(rData) {
+				console.log(rData);
+			}
+		});
+	});
+	
+	
 });
 </script>
 <%@ include file="/WEB-INF/views/include/frmPaging.jsp" %>
@@ -176,11 +214,9 @@ $(function() {
 						<td></td>
 						<td></td>
 						<td><button type="button" 
-								class="btn btn-sm btn-warning btn-reply-update">
-								수정</button></td>
+								class="btn btn-sm btn-warning btn-reply-update">수정</button></td>
 						<td><button type="button" 
-								class="btn btn-sm btn-danger btn-reply-delete">
-								삭제</button></td>
+								class="btn btn-sm btn-danger btn-reply-delete">삭제</button></td>
 					</tr>
 				</tbody>
 			</table>

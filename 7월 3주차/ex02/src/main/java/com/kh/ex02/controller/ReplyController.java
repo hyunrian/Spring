@@ -52,7 +52,8 @@ public class ReplyController {
 	// 삭제
 	@RequestMapping(value = "/delete/{rno}", method = RequestMethod.DELETE)
 	public String delete(@PathVariable("rno") int rno) {
-		replyService.delete(rno);
+		System.out.println("rno:" + rno);
+//		replyService.delete(rno);
 		return "success";
 	}
 
