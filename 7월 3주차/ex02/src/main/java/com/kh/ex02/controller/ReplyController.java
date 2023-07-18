@@ -26,6 +26,7 @@ public class ReplyController {
 	@RequestMapping(value = "/list/{bno}", method = RequestMethod.GET)
 	public List<ReplyVo> getList(@PathVariable("bno") int bno) {
 		// @PathVariable : 경로에 변수를 사용하는 경우에 씀(/reply/list/501)
+		// 뒤에 오는 ("bno")는 값이 하나인 경우 생략 가능하지만 여러개인 경우 명시해줘야 함
 		// @RequestParam : url 뒤에 ?bno=501의 형태로 올 때 사용(/reply/list?bno=501)
 		return replyService.getList(bno);
 	}
