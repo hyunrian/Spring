@@ -58,8 +58,12 @@ public class PagingDto {
 		 * */
 		endPage = (int)(Math.ceil(nowPage / (double)PAGE_BLOCK_COUNT)) * PAGE_BLOCK_COUNT;
 		startPage = endPage - (PAGE_BLOCK_COUNT - 1);
-
-		totalPage = (totalCount / perPage) + 1;
+		
+		if ((totalPage % perPage) != 0) {
+			totalPage = (totalCount / perPage) + 1;
+		} else {
+			totalPage = totalCount / perPage;
+		}
 		if (endPage > totalPage) {
 			endPage = totalPage;
 		}

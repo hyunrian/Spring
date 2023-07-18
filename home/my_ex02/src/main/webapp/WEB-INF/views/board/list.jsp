@@ -25,12 +25,11 @@ $(function() {
 		location.href="/board/list?perPage=" + perPage;
 	});
 	
-	// 이 기능부터 다시 하면 됨. 페이지번호를 눌러도 이동이 안되고 있음
 	$(".page-link").click(function(e) {
 		e.preventDefault();
 		var nowPage = $(this).attr("href");
 		console.log("nowPage:" + nowPage);
-		$(input[name='nowPage']).val(nowPage);
+		$("input[name=nowPage]").val(nowPage);
 		$("#frmPaging").submit();
 	});
 });
@@ -51,7 +50,9 @@ $(function() {
 				</div>
 			</div>
 		</div>
+		
 		<div>
+			<!-- n개씩 보기 -->
 			<select name="perPage" id="perPage">
 				<c:forEach var="v" begin="5" end="20" step="5">
 					<option value="${v}"
@@ -61,7 +62,18 @@ $(function() {
 					>${v}개씩 보기</option>
 				</c:forEach>
 			</select>
-		</div><br>
+		
+			<!-- 페이징 완료. 검색기능 추가 필요 -->
+			<!-- 검색 -->
+			<select>
+				<option>제목</option>
+				<option>내용</option>
+				<option>작성자</option>
+			</select>
+			<input type="text">
+			<button type="button">검색</button>
+		</div>
+		<br>
 		<div class="row">
 			<div class="col-md-12">
 				<table class="table">
@@ -91,8 +103,10 @@ $(function() {
 				<nav>
 					<ul class="pagination">
 						<li class="page-item">
-							<a class="page-link" href=
-								"/board/list?nowPage=${dto.startPage - 1}">&lt;&lt;</a>
+							<c:if test="${dto.startPage > 1}">
+								<a class="page-link" href=
+									"${dto.startPage - 1}">&laquo;</a>
+							</c:if>
 						</li>
 						<c:forEach var="v" begin="${dto.startPage}" end="${dto.endPage}">
 							<c:choose>
@@ -107,7 +121,9 @@ $(function() {
 							</li>
 						</c:forEach>
 						<li class="page-item">
-							<a class="page-link" href="/board/list?nowPage=${dto.endPage + 1}">&gt;&gt;</a>
+								<c:if test="${dto.nowPage < dto.totalPage}">
+									<a class="page-link" href="${dto.endPage + 1}">&raquo;</a>
+								</c:if>
 						</li>
 					</ul>
 				</nav>
