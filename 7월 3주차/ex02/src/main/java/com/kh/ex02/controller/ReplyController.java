@@ -35,7 +35,7 @@ public class ReplyController {
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public String insert(@RequestBody ReplyVo replyVo) {
 		// JSON타입 등으로 들어오는 데이터 -> RequestBody 사용
-		System.out.println("replyVo:" + replyVo);
+//		System.out.println("replyVo:" + replyVo);
 		replyService.insert(replyVo);
 		return "success";
 	}
@@ -45,6 +45,7 @@ public class ReplyController {
 	// RequestMethod를 post나 get으로 해도 동작은 잘 함
 	// 부분 업데이트 - patch, 전체 업데이트 - put을 보통 사용함
 	public String update(@RequestBody ReplyVo replyVo) {
+		System.out.println("replyVo:" + replyVo);
 		replyService.update(replyVo);
 		return "success";
 	}
@@ -53,7 +54,7 @@ public class ReplyController {
 	@RequestMapping(value = "/delete/{rno}", method = RequestMethod.DELETE)
 	public String delete(@PathVariable("rno") int rno) {
 		System.out.println("rno:" + rno);
-//		replyService.delete(rno);
+		replyService.delete(rno);
 		return "success";
 	}
 

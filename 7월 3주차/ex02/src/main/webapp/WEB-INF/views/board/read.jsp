@@ -28,7 +28,6 @@ $(function() {
 	
 	function getReplyList() {
 		$.get("/reply/list/${boardVo.bno}", function(rData) {
-			console.log(rData);
 			/*
 			for (var v = 0; v < rData.length; v++) {
 				var tr = $("#replyList").find("tr").eq(0).clone();
@@ -96,6 +95,9 @@ $(function() {
 				}
 			}
 		});
+		
+		$("#replytext").val("");
+		$("#replyer").val("");
 	});
 	
 // 	$(".btn-reply-update").click(function() {
@@ -103,26 +105,101 @@ $(function() {
 // 	}); 
 	// 로딩되기 전에 여기 부분을 읽는데, 그 때는 처음 tr이 아닌 나머지 tr의 btn-reply-update 버튼을 
 	// 찾을 수 없기 때문에 상위 엘리먼트를 기준으로 찾아야 함
+	
+	// 변수를 사용하지 않고 <span style="display:none">을 만들어 그 안에 각 댓글의 값을 넣어도 됨
 
+	var flag = 0;
+	var prevBtn = null;
+	
 	$("#replyList").on("click", ".btn-reply-update", function() {
-// 		console.log("update");
+		var that = $(this);
+		flag++;
+		console.log(flag);
+		if (flag > 1) {
+			$(".btn-reply-update").show().attr("data-status", "default");
+			$(".btn-reply-update-completed").hide();
+			let val = $(".replytext").find("input");
+			let dd = $(".btn-reply-update[data-status='default']");
+			if (prevBtn != null) {
+				console.log(prevBtn);
+				let prevTd = prevBtn.parent().parent().find("td").eq(1);
+				let prevText = prevTd.find("input").val();
+				prevTd.text(prevText);
+				
+				let prevTd2 = prevTd.next();
+				let prevWriter = prevTd2.find("input").val();
+				prevTd2.text(prevWriter);
+			}
+			--flag;
+			console.log("flag:" + flag);
+			prevBtn = $(this);
+		} else {
+			prevBtn = $(this);
+		}
+		
+		$(this).hide().attr("data-status", "updating");
+// 		let btnComplete = $(this).parent().find("button").eq(1);
+		let btnComplete = $(this).next();
+		btnComplete.show();
+		let replytext = $(this).parent().parent().find("td").eq(1);
+		let content = replytext.text();
+		replytext.html("<input type='text' value='" + content + "'>");
+		
+		let replywriter = $(this).parent().parent().find("td").eq(2);
+		let name = replywriter.text();
+		replywriter.html("<input type='text' value='" + name + "'>");
+		
+		let rno = $(this).parent().parent().find("td").eq(0);
+		
+		console.log($(this).next());
+		
 	});
 	
-	$("#replyList").on("click", ".btn-reply-delete", function() {
-// 		console.log("delete");
-		var rno = $(this).parent().parent().find("td").eq(0).text();
-		console.log(rno);
-		let url = "/reply/delete";
-		let sData = {"rno" : rno};
-		
+	// 버튼1의 click 이벤트 안에 버튼2의 click 이벤트를 설정하면
+	// 버튼1을 누를 때마다 버튼 2의 클릭이벤트 횟수가 누적되어
+	// 버튼2를 클릭했을 때 해당 횟수만큼 실행됨 -> 주의!
+	$("#replyList").on("click", ".btn-reply-update-completed", function() {
+		let replytext = $(this).parent().parent().find("td").eq(1);
+		let replywriter = $(this).parent().parent().find("td").eq(2);
+		let rno = $(this).parent().parent().find("td").eq(0);
+		let sData = {
+				"replytext" : replytext.find("input").val(),
+				"replyer" : replywriter.find("input").val(),
+				"rno" : rno.text()
+		};
 		$.ajax({
-			"type" : "delete",
-			"url" : url,
-// 			"dataType" : "text",
-// 			"data" : JSON.stringify(sData), // json데이터를 문자열로 변경
-			"data" : sData,
+			"type" : "patch",
+			"url" : "/reply/update",
+			"headers" : {
+				"Content-Type" : "application/json",
+				"X-HTTP-Method-Override" : "patch"
+			},
+			"dataType" : "text",
+			"data" : JSON.stringify(sData), // json데이터를 문자열로 변경
 			"success" : function(rData) {
 				console.log(rData);
+				if (rData == "success") {
+					$("#replyList").find("tr:gt(0)").remove();
+					console.log("removed");
+					getReplyList();
+				}
+			}
+		});
+		flag = 0;
+		});
+	
+	$("#replyList").on("click", ".btn-reply-delete", function() {
+		var rno = $(this).parent().parent().find("td").eq(0).text();
+		$.ajax({
+			"type" : "delete",
+			"url" : "/reply/delete/" + rno,
+			"data" : rno,
+			"success" : function(rData) {
+				console.log(rData);
+				if (rData == "success") {
+					$("#replyList").find("tr:gt(0)").remove();
+					getReplyList();
+				}
 			}
 		});
 	});
@@ -209,12 +286,14 @@ $(function() {
 				<tbody id="replyList">
 					<tr style="display:none;">
 						<td></td>
-						<td></td>
-						<td></td>
+						<td class="replytext"></td>
+						<td class="replyer"></td>
 						<td></td>
 						<td></td>
 						<td><button type="button" 
-								class="btn btn-sm btn-warning btn-reply-update">수정</button></td>
+								class="btn btn-sm btn-warning btn-reply-update">수정</button>
+							<button type="button" style="display:none;"
+								class="btn btn-sm btn-warning btn-reply-update-completed">수정완료</button></td>
 						<td><button type="button" 
 								class="btn btn-sm btn-danger btn-reply-delete">삭제</button></td>
 					</tr>
