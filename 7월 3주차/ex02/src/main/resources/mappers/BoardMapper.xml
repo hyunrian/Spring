@@ -8,6 +8,14 @@
 		namespace 값은 다른 mapper와 겹치지 않는 이름으로 지어주면 됨.
 		sql 쿼리 id가 중복될 때 namespace로 구분하는 용도
 	 -->
+	 
+	<!-- 댓글 개수 업데이트 -->
+	<update id="updateReplycnt">
+		update tbl_board
+		set replycnt = replycnt + #{amount}
+		where bno = #{bno}
+	</update>
+	
 	<!-- 글쓰기 -->
 	<insert id="create">
 		insert into tbl_board (bno, title, content, writer)

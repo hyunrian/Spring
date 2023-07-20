@@ -111,6 +111,7 @@ $(function() {
 	var flag = 0;
 	var prevBtn = null;
 	
+	// 댓글 수정
 	$("#replyList").on("click", ".btn-reply-update", function() {
 		var that = $(this);
 		flag++;
@@ -188,11 +189,12 @@ $(function() {
 		flag = 0;
 		});
 	
+	// 댓글 삭제
 	$("#replyList").on("click", ".btn-reply-delete", function() {
 		var rno = $(this).parent().parent().find("td").eq(0).text();
 		$.ajax({
 			"type" : "delete",
-			"url" : "/reply/delete/" + rno,
+			"url" : "/reply/delete/" + rno + "/${boardVo.bno}",
 			"data" : rno,
 			"success" : function(rData) {
 				console.log(rData);
@@ -269,7 +271,7 @@ $(function() {
 	</div>
 	
 	<!-- 댓글 목록 -->
-	<div class="row" style="margin-top:30px">
+	<div id="replyListDiv" class="row" style="margin-top:30px">
 		<div class="col-md-12">
 			<table class="table">
 				<thead>

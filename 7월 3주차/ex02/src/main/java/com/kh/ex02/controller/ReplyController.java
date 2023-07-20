@@ -45,16 +45,17 @@ public class ReplyController {
 	// RequestMethod를 post나 get으로 해도 동작은 잘 함
 	// 부분 업데이트 - patch, 전체 업데이트 - put을 보통 사용함
 	public String update(@RequestBody ReplyVo replyVo) {
-		System.out.println("replyVo:" + replyVo);
+//		System.out.println("replyVo:" + replyVo);
 		replyService.update(replyVo);
 		return "success";
 	}
 	
 	// 삭제
-	@RequestMapping(value = "/delete/{rno}", method = RequestMethod.DELETE)
-	public String delete(@PathVariable("rno") int rno) {
-		System.out.println("rno:" + rno);
-		replyService.delete(rno);
+	@RequestMapping(value = "/delete/{rno}/{bno}", method = RequestMethod.DELETE)
+	public String delete(@PathVariable("rno") int rno, 
+						@PathVariable("bno") int bno) {
+		System.out.printf("rno:%d, bno:%d\n", rno, bno);
+		replyService.delete(rno, bno);
 		return "success";
 	}
 

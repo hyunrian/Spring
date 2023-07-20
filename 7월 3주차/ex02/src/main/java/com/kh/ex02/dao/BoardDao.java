@@ -1,6 +1,8 @@
 package com.kh.ex02.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,13 @@ public class BoardDao {
 	public int getCount(PagingDto pagingDto) throws Exception {
 		int count = sqlSession.selectOne(NAMESPACE + "getCount", pagingDto);
 		return count;
+	}
+	
+	public void updateReplycnt(int bno, int amount) {
+		Map<String, Integer> map = new HashMap<>();
+		map.put("amount", amount);
+		map.put("bno", bno);
+		sqlSession.update(NAMESPACE + "updateReplycnt", map);
 	}
 
 }

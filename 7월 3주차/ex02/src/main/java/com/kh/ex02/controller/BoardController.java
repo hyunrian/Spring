@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.ex02.service.BoardService;
@@ -32,12 +33,22 @@ public class BoardController {
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	// localhost/board/register
-	public String registPost(BoardVo boardVo, 
+	public String registPost(MultipartFile file, BoardVo boardVo, 
 			RedirectAttributes rttr) throws Exception { // post방식으로 처리
 	// 1. getter&setter가 있고 2. jsp에서 설정한 name과 이름이 같으면 자동으로 boardVo 데이터 처리됨
-		
-		System.out.println(boardVo);
-		boardService.create(boardVo);
+		System.out.println("controller, register, file:" + file);
+		System.out.println("controller, register, boardVo:" + boardVo);
+		// form태그로 파일 넘겨받기
+		// model2에서는 파일인 경우와 아닌 경우에 따라 데이터 처리를 따로 설정해야 했지만 
+		// spring에서는 자동으로 모두 처리됨
+		// jsp에서 넘겨주는 name과 파라미터명이 동일하지 않으면 RequestParam 설정 필요
+		System.out.println("controller, register, originalName:" 
+					+ file.getOriginalFilename()); // 파일명
+		System.out.println("controller, register, name:" 
+				+ file.getName()); // jsp에서 지정한 name
+		System.out.println("controller, register, size:" 
+				+ file.getSize());
+//		boardService.create(boardVo);
 		rttr.addFlashAttribute("msg", "SUCCESS");
 		
 		return "redirect:/board/list";

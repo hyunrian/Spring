@@ -41,6 +41,14 @@ $(function() {
 		location.href="/board/list?searchType=" + searchType + "&keyword=" + keyword;
 	});
 	<%-- 여기에 쓰다 만 코드가 있어서 script 내 함수가 제대로 작동하지 않는 에러가 있었음 --%>
+	
+	// 댓글 개수 뱃지
+	$(".a_title").next().click(function() {
+		var bno = $(this).parent().prev().text();
+		console.log(bno);
+		location.href="/board/read?bno=" + bno + "#replyListDiv";
+		// 기능이 완전히 구현된게 아님. 이런 기능이 있다는 것만 일단 알아두자
+	});
 });
 </script>
 <style>
@@ -133,7 +141,11 @@ $(function() {
 							<c:forEach var="boardVo" items="${list}">
 								<tr>
 									<td>${boardVo.bno}</td>
-									<td><a href="/board/read?bno=${boardVo.bno}">${boardVo.title}</a></td>
+									<td><a href="/board/read?bno=${boardVo.bno}" class="a_title">${boardVo.title}</a>
+									<c:if test="${boardVo.replycnt != 0}">
+										<span class="badge badge-info"
+											style="cursor:pointer; margin-left:10px;">${boardVo.replycnt}</span>
+									</c:if>
 <%-- 									<td><a class="a_title" href="${boardVo.bno}">${boardVo.title}</a></td> --%>
 									<td>${boardVo.writer}</td>
 									<td>${boardVo.regdate}</td>
