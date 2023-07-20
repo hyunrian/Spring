@@ -26,12 +26,12 @@ $(function() {
 		// <form enctype="multipart/form-data" action="/upload/uploadFile">
 		// 	<input type="file" name="file">
 		// </form> 의 역할을 하는 코드가 필요함
-		let formData = new FormData();
+		let formData = new FormData(); // html5부터 사용
 		formData.append("file", file); // file이라는 이름으로 file 전송
 		let url = "/upload/uploadFile";
 		$.ajax({
 			"type" : "post",
-			"processData" : false,
+			"processData" : false, // 파라미터 형식으로 보내지 않음
 			"contentType" : false, // text데이터가 아닌 binary data임을 알림
 			"url" : url,
 			"data" : formData,
