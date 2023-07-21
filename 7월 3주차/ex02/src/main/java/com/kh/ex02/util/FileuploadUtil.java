@@ -31,43 +31,60 @@ public class FileuploadUtil {
 			e.printStackTrace();
 		} 
 		
-		// 이미지 여부에 따라 썸네일 이미지 생성하기(ImageScalr 라이브러리 사용)
-		String thumbnailPath =  makeThumbnail(uploadPath, dirPath, filename);
-		System.out.println("thumbnailPath: " + thumbnailPath);
+		// 이미지 여부에 따라 썸네일 이미지 생성하기
+		if (isImage(filename)) {
+			makeThumbnail(uploadPath, dirPath, filename);
+		}
 		
 		String filePath = saveFilename.substring(uploadPath.length());
 		return filePath;
 	}
 	
-	// 이미지 여부에 따라 썸네일 이미지 생성하기(ImageScalr 라이브러리 사용)
-	private static String makeThumbnail(
+	// 이미지 여부 확인
+	private static boolean isImage(String filename) {
+		String formatName = getFormatName(filename);
+		String uName = formatName.toUpperCase();
+		if (uName.equals("JPG") || 
+				uName.equals("GIF") || 
+				uName.equals("PNG")) {
+			return true;
+		}
+		return false;
+	}
+	
+	// 포맷 얻기
+	private static String getFormatName(String filename) {
+		int dotIndex = filename.lastIndexOf(".");
+		String formatName = filename.substring(dotIndex + 1); // 확장자
+		return formatName;
+	}
+	
+	// 썸네일 이미지 생성하기(ImageScalr 라이브러리 사용)
+	private static void makeThumbnail(
 				String uploadPath, String dirPath, String filename) {
 		
 		String sourcePath =  
-				uploadPath + "/" + dirPath + "/" + filename; 
+				uploadPath + "/" + dirPath + "/" + filename;
+		// 썸네일 이미지는 filename 앞에 s_를 붙이도록 함
 		String thumbnailPath = 
 				uploadPath + "/" + dirPath + "/s_" + filename; 
 		try {
 			// 원본 이미지를 메모리에 로딩
 			BufferedImage sourceImage = ImageIO.read(new File(sourcePath));
 			
-			// 저장할 썸네일(높이 100px로 너비 자동 조절)
+			// 저장할 썸네일(높이 100px에 맞춰 너비 자동 조절)
 			BufferedImage destImage = 
 					Scalr.resize(sourceImage, Scalr.Method.AUTOMATIC, 
 									Scalr.Mode.FIT_TO_HEIGHT, 100);
 			
 			// 썸네일 이미지 저장
 			File f = new File(thumbnailPath);
-			int dotIndex = filename.lastIndexOf(".");
-			String formatName = filename.substring(dotIndex + 1); // 확장자
+			String formatName = getFormatName(filename);
 			ImageIO.write(destImage, formatName.toUpperCase(), f);
-			
-			return thumbnailPath;
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
 	}
 	
 	// 날짜별 폴더 만들어서 업로드 파일 저장하기 -> 날짜 구하는 메서드
