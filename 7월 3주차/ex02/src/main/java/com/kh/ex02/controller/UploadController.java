@@ -1,8 +1,17 @@
 package com.kh.ex02.controller;
 
-import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
+import javax.annotation.Resource;
+import javax.imageio.ImageReader;
+
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,6 +44,27 @@ public class UploadController {
 		}
 		return null;
 	} 
+	
+	// 썸네일 이미지 register.jsp로 전달하기
+	@ResponseBody
+	@RequestMapping(value = "/displayImage", method = RequestMethod.GET)
+	public byte[] displayImage(String thumbnail) {
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(uploadPath + thumbnail);
+			byte[] data = IOUtils.toByteArray(fis); // commons-io 라이브러리 사용
+			return data;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				fis.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
 	
 
 }
