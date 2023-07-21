@@ -31,3 +31,19 @@ function make2digits(num) {
 	}
 	return num;
 }
+
+function isImage(filename) {
+	let formatName = getFormatName(filename);
+	let uName = formatName.toUpperCase();
+	if (uName == "JPG" || uName == "GIF" || uName == "PNG") {
+		return true;
+	}
+	return false;
+}
+
+function getFormatName(filename) {
+	let dotIndex = filename.lastIndexOf(".");
+	let formatName = filename.substring(dotIndex + 1); // 확장자
+	return formatName;
+}
+	
