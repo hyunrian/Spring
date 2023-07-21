@@ -36,7 +36,27 @@ $(function() {
 			"url" : url,
 			"data" : formData,
 			"success" : function(rData) {
-				console.log(rData);
+// 				console.log(rData);
+				let div = $("#uploadedItem").clone();
+				let filename = rData.substring(rData.indexOf("_") + 1);
+				div.find("span").text(filename);
+				
+				if (isImage(filename)) {
+					let slashIndex = rData.lastIndexOf("/");
+					let front = rData.substring(0, slashIndex + 1);
+					let back = rData.substring(slashIndex + 1);
+					let thumbnail = front + "s_" + back;
+// 					console.log("front", front);
+// 					console.log("back", back);
+// 					console.log("thumbnail", thumbnail);
+					div.find("img").attr("src", thumbnail);
+				} else {
+					div.find("img").attr("src", "/images/default.png");
+				}
+				
+				$("#uploadedDiv").append(div);
+				div.show();
+				
 			}
 		});
 	});
@@ -71,9 +91,18 @@ $(function() {
 						id="writer" name="writer"/>
 				</div>
 				
-				<div id="uploadDiv">
-					
+				<!-- 파일 업로드 공간 -->
+				<div id="uploadDiv"></div>
+				
+				<!-- 복사(clone)할 때 사용할 div -->
+				<div id="uploadedItem" style="display:none;">
+					<img src="/images/default.png" height="100px">
+					<span>default</span>
+					<a href="#">&times;</a>
 				</div>
+				
+				<!-- 업로드된 파일 확인 -->
+				<div id="uploadedDiv"></div>
 				
 				<button type="submit" class="btn btn-primary">
 					작성완료
