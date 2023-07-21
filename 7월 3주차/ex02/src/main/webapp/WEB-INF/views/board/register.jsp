@@ -11,6 +11,13 @@
 	margin: 20px auto;
 	border: 2px dashed purple;
 }
+
+/* div는 block-level element. float: left하면 위아래가 아닌 옆으로 배치 */
+#uploadedItem {
+	display: none;
+ 	float: left;
+ 	width: 150px;
+}
 </style>
 <script>
 $(function() {
@@ -49,10 +56,8 @@ $(function() {
 // 					console.log("front", front);
 // 					console.log("back", back);
 // 					console.log("thumbnail", thumbnail);
-					div.find("img").attr("src", thumbnail);
-				} else {
-					div.find("img").attr("src", "/images/default.png");
-				}
+					div.find("img").attr("src", "/upload/displayImage?thumbnail=" + thumbnail);
+				} 
 				
 				$("#uploadedDiv").append(div);
 				div.show();
@@ -95,18 +100,20 @@ $(function() {
 				<div id="uploadDiv"></div>
 				
 				<!-- 복사(clone)할 때 사용할 div -->
-				<div id="uploadedItem" style="display:none;">
-					<img src="/images/default.png" height="100px">
-					<span>default</span>
+				<div id="uploadedItem">
+					<img src="/images/default.png" height="100px"><br>
+					<span>default</span><br>
 					<a href="#">&times;</a>
 				</div>
 				
 				<!-- 업로드된 파일 확인 -->
 				<div id="uploadedDiv"></div>
 				
-				<button type="submit" class="btn btn-primary">
-					작성완료
-				</button>
+				<div style="clear:both;"> <!-- uploadedItem에 설정된 float값 해제 -->
+					<button type="submit" class="btn btn-primary" style="margin-top:20px;"> 
+						작성완료
+					</button>
+				</div>
 			</form>
 		</div>
 	</div>
