@@ -3,22 +3,6 @@
 
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
 
-<style>
-#uploadDiv {
-	width: 80%;
-	height: 100px;
-	background-color: lightpink;
-	margin: 20px auto;
-	border: 2px dashed purple;
-}
-
-/* div는 block-level element. float: left하면 위아래가 아닌 옆으로 배치 */
-#uploadedItem {
-	display: none;
- 	float: left;
- 	width: 150px;
-}
-</style>
 <script>
 $(function() {
 	$("#uploadDiv").on("dragenter dragover", function(e) { // 영역 안으로 들어올 때 함수 실행
@@ -45,6 +29,7 @@ $(function() {
 			"success" : function(rData) {
 // 				console.log(rData);
 				let div = $("#uploadedItem").clone();
+				div.removeAttr("id").addClass("uploadedItem");
 				let filename = rData.substring(rData.indexOf("_") + 1);
 				div.find("span").text(filename);
 				
@@ -88,6 +73,22 @@ $(function() {
 			}
 		});
 	});
+	
+	let index = 0;
+	
+	// 폼 전송
+	$("#myform").submit(function() { // 폼을 전송할 때 수행할 코드
+		$(".uploadedItem a").each(function() { // 반복문(for-each)
+			let fullname = $(this).attr("data-filename");
+			console.log(fullname);
+			// controller로 보낼 데이터 작업
+			// form태그에 hidden으로 filename을 보내는 태그 추가하기
+			let inputTag = "<input type='hidden' name='files["+ (index++) +"]'";
+			inputTag += " value='" + fullname + "'>";
+			$("#myform").prepend(inputTag); // form 태그 내 앞부분에 추가하기
+		});
+// 		return false; // -> 전송을 하지 않음
+	});
 });
 </script>
 
@@ -99,9 +100,9 @@ $(function() {
 				<p><a href="/board/list" class="btn btn-success">글 목록으로 이동</a></p>
 				<%-- a링크로 이동 : get방식 --%>
 			</div>
-			<form role="form" action="/board/register" method="post"
-				enctype="multipart/form-data"> <%-- 파일처리(binary data)를 위한 데이터 타입 --%>
-				<input type="file" name="file">
+			<form id="myform" role="form" action="/board/register" method="post">
+<%-- 				enctype="multipart/form-data"> 파일처리(binary data)를 위한 데이터 타입 --%>
+<!-- 				<input type="file" name="file"> -->
 				<div class="form-group">
 					<label for="title">제목</label> 
 					<%-- lable for: id랑 같게 맞춤 --%>
@@ -123,7 +124,7 @@ $(function() {
 				<div id="uploadDiv"></div>
 				
 				<!-- 복사(clone)할 때 사용할 div -->
-				<div id="uploadedItem">
+				<div id="uploadedItem" style="display:none;">
 					<img src="/images/default.png" height="100px"><br>
 					<span>default</span><br>
 					<a href="#">&times;</a>

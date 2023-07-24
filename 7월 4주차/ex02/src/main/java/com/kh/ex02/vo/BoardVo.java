@@ -13,4 +13,7 @@ public class BoardVo {
 	private Timestamp regdate;
 	private int viewcnt;
 	private int replycnt;
+	
+	// 첨부파일
+	private String[] files;
 }

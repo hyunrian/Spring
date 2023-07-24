@@ -5,6 +5,33 @@
 
 <script>
 $(function() {
+	
+	<!-- 첨부파일 리스트 -->
+	$.getJSON("/board/getAttachList/${boardVo.bno}", function(rData) {
+// 		console.log(rData);
+		let index = 0;
+		let filename = [];
+		$.each(rData, function() { // 각각 넘어오는 데이터를 반복적으로 처리
+			div = $("#uploadedItem").clone();
+			div.removeAttr("id").addClass("uploadedItem");
+			filename[index] = 
+				rData[index].toString().substring(rData[index].indexOf("_") + 1);
+			div.find("span").text(filename[index]);
+			if (isImage(filename[index])) {
+				let slashIndex = rData[index].lastIndexOf("/");
+				let front = rData[index].substring(0, slashIndex + 1);
+				let back = rData[index].substring(slashIndex + 1);
+				let thumbnail = front + "s_" + back;
+				div.find("img").attr("src", "/upload/displayImage?thumbnail=" + thumbnail);
+			}
+			index++;
+			div.show();
+			$("#uploadedDiv").append(div);
+		});
+		
+	});
+	
+	
 	$("#btnModify").click(function() {
 		<!-- prop: 값이 true/false. 단독으로 사용되는 경우 ex) checked / 그 외: attr  -->
 		$(".readonly").prop("readonly", false);
@@ -220,35 +247,49 @@ $(function() {
 				<p><a class="btn btn-success goToList">글 목록으로 이동</a></p>
 				<%-- a링크로 이동 : get방식 --%>
 			</div>
-			<form role="form" action="/board/mod" method="post">
-				<input type="hidden" name="bno" value="${boardVo.bno}">
-				<div class="form-group">
-					<label for="title">제목</label> 
-					<%-- lable for: id랑 같게 맞춤 --%>
-					<input type="text" class="form-control readonly"
-						id="title" name="title" value="${boardVo.title}" readonly/>
-				</div>
-				<div class="form-group">
-					<label for="content">내용</label>
-					<textarea class="form-control readonly" 
-						id="content" name="content" readonly>${boardVo.content}</textarea>
-				</div>
-				<div class="form-group">
-					<label for="writer">작성자</label>
-					<input type="text" class="form-control readonly" 
-						id="writer" name="writer" value="${boardVo.writer}" readonly/>
-				</div>
-				<button type="button" class="btn btn-warning" id="btnModify">
-					수정
-				</button>
-				<button type="submit" class="btn btn-primary" 
-					id="btnModifyFinish" style="display:none;">
-					수정완료
-				</button>
-				<a href="/board/delete?bno=${boardVo.bno}" class="btn btn-danger">
-					삭제
-				</a>
-			</form>
+			<div>
+				<form role="form" action="/board/mod" method="post">
+					<input type="hidden" name="bno" value="${boardVo.bno}">
+					<div class="form-group">
+						<label for="title">제목</label> 
+						<%-- lable for: id랑 같게 맞춤 --%>
+						<input type="text" class="form-control readonly"
+							id="title" name="title" value="${boardVo.title}" readonly/>
+					</div>
+					<div class="form-group">
+						<label for="content">내용</label>
+						<textarea class="form-control readonly" 
+							id="content" name="content" readonly>${boardVo.content}</textarea>
+					</div>
+					<div class="form-group">
+						<label for="writer">작성자</label>
+						<input type="text" class="form-control readonly" 
+							id="writer" name="writer" value="${boardVo.writer}" readonly/>
+					</div>
+					
+					<button type="button" class="btn btn-warning" id="btnModify">
+						수정
+					</button>
+					<button type="submit" class="btn btn-primary" 
+						id="btnModifyFinish" style="display:none;">
+						수정완료
+					</button>
+					<a href="/board/delete?bno=${boardVo.bno}" class="btn btn-danger">
+						삭제
+					</a>
+				</form>									
+			</div><br>
+			
+			<!-- 첨부파일 목록 -->
+			<div id="uploadedItem" style="display:none;">
+					<img src="/images/default.png" height="100px"><br>
+					<span>default</span><br>
+					<a href="#">&times;</a>
+			</div>
+			
+			<!-- 브라우저에서 보일 첨부파일리스트 div -->
+			<div id="uploadedDiv"></div>
+			
 		</div>
 	</div>
 	<br>

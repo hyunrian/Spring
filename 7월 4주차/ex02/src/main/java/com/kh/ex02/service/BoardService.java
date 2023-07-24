@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.ex02.dao.BoardDao;
 import com.kh.ex02.vo.BoardVo;
@@ -15,8 +16,15 @@ public class BoardService {
 	@Autowired
 	private BoardDao boardDao;
 
+	@Transactional
 	public void create(BoardVo boardVo) throws Exception {
-		boardDao.create(boardVo);
+		int bno = boardDao.getNextSeq();
+		boardVo.setBno(bno);
+		boardDao.create(boardVo); // tbl_board에 추가
+		
+		for (String filename : boardVo.getFiles()) {
+			boardDao.insertAttach(filename, bno); // tbl_attach에 추가
+		}
 	}
 
 	public List<BoardVo> listAll(PagingDto pagingDto) throws Exception {
@@ -24,8 +32,10 @@ public class BoardService {
 		return list;
 	}
 
+	@Transactional
 	public BoardVo read(int bno) throws Exception {
 		BoardVo boardVo = boardDao.read(bno);
+		boardDao.updateViewCnt(bno);
 		return boardVo;
 	}
 
@@ -39,6 +49,10 @@ public class BoardService {
 	
 	public int getCount(PagingDto pagingDto) throws Exception {
 		return boardDao.getCount(pagingDto);
+	}
+	
+	public List<String> getAttachList(int bno) {
+		return boardDao.getAttachList(bno);
 	}
 
 }

@@ -9,6 +9,24 @@
 		sql 쿼리 id가 중복될 때 namespace로 구분하는 용도
 	 -->
 	 
+	<!-- 첨부파일 목록 얻기 -->
+	<select id="getAttachList" resultType="string">
+		select fullname from tbl_attach
+		where bno = #{bno}
+	</select>
+	 
+	<!-- 다음 시퀀스 값 얻기(첨부파일 테이블 추가, 글쓰기에서 활용) -->
+	<select id="getNextSeq" resultType="int">
+		select seq_board_bno.nextval
+		from dual
+	</select>
+	
+	<!-- 첨부파일 테이블에 추가 -->
+	<insert id="insertAttach">
+		insert into tbl_attach(fullname, bno)
+		values (#{fullname}, #{bno})
+	</insert>
+	
 	<!-- 댓글 개수 업데이트 -->
 	<update id="updateReplycnt">
 		update tbl_board
@@ -19,7 +37,7 @@
 	<!-- 글쓰기 -->
 	<insert id="create">
 		insert into tbl_board (bno, title, content, writer)
-		values (seq_board_bno.nextval, #{title}, #{content}, #{writer})
+		values (#{bno}, #{title}, #{content}, #{writer})
 		<!-- #{} : mybatis가 알 수 있는 데이터를 사용 --> 
 	</insert>
 	<!-- 전체조회 -->
@@ -71,6 +89,13 @@
 		select * from tbl_board 
 		where bno = #{bno}
 	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id="updateViewCnt">
+		update tbl_board
+		set viewcnt = viewcnt + 1
+		where bno = #{bno}
+	</update>
 	
 	<!-- 글 수정 -->
 	<update id="update">

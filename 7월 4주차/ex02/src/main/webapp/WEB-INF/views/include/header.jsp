@@ -34,6 +34,8 @@
 <!-- summernote -->
 <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
 
+<link rel="stylesheet" href="/css/mystyle.css"> <!-- resources/css에 추가한 css파일 등록 -->
+
 <!-- jQuery -->
 <script src="/plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->

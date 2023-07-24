@@ -53,5 +53,26 @@ public class BoardDao {
 		map.put("bno", bno);
 		sqlSession.update(NAMESPACE + "updateReplycnt", map);
 	}
-
+	
+	public int getNextSeq() {
+		int bno = sqlSession.selectOne(NAMESPACE + "getNextSeq");
+		return bno;
+	}
+	
+	public void insertAttach(String fullname, int bno) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("fullname", fullname);
+		map.put("bno", bno);
+		sqlSession.insert(NAMESPACE + "insertAttach", map);
+	}
+	
+	public void updateViewCnt(int bno) {
+		sqlSession.update(NAMESPACE + "updateViewCnt", bno);
+	}
+	
+	public List<String> getAttachList(int bno) {
+		List<String> list = sqlSession.selectList(
+							NAMESPACE + "getAttachList", bno);
+		return list;
+	}
 }
