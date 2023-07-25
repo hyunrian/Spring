@@ -341,7 +341,7 @@ $(function() {
 						id="btnModifyFinish" style="display:none;">
 						수정완료
 					</button>
-					<a href="/board/delete?bno=${boardVo.bno}" class="btn btn-danger">
+					<a href="/board/delete?bno=${boardVo.bno}" class="btn btn-danger" id="btnDelete">
 						삭제
 					</a>
 				</form>									

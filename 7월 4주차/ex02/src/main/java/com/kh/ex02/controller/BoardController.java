@@ -99,15 +99,17 @@ public class BoardController {
 	// 삭제
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String delete(int bno) throws Exception {
-//		System.out.println("pagingDto in delete:" + tempDto);
+		System.out.println("pagingDto in delete:" + tempDto);
 		boardService.delete(bno);
-		if (tempDto != null) {
+		if (tempDto.getKeyword() == null) {
+			System.out.println("null!!!");
+			return "redirect:/board/list";
+		} else {
+			System.out.println("keyword exists");
 			return "redirect:/board/list?page=" + tempDto.getPage() 
 			+ "&perPage=" + tempDto.getPerPage()
 			+ "&searchType=" + tempDto.getSearchType()
 			+ "&keyword=" + tempDto.getKeyword();
-		} else {
-			return "board/list";
 		}
 	}
 	

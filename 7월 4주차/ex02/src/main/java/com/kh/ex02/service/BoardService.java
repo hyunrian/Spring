@@ -2,11 +2,14 @@ package com.kh.ex02.service;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.ex02.dao.BoardDao;
+import com.kh.ex02.util.FileuploadUtil;
 import com.kh.ex02.vo.BoardVo;
 import com.kh.ex02.vo.PagingDto;
 
@@ -15,15 +18,19 @@ public class BoardService {
 	
 	@Autowired
 	private BoardDao boardDao;
+	
+	@Resource(name = "uploadPath")
+	private String uploadPath;
 
 	@Transactional
 	public void create(BoardVo boardVo) throws Exception {
 		int bno = boardDao.getNextSeq();
 		boardVo.setBno(bno);
 		boardDao.create(boardVo); // tbl_board에 추가
-		
-		for (String filename : boardVo.getFiles()) {
-			boardDao.insertAttach(filename, bno); // tbl_attach에 추가
+		if (boardVo.getFiles() != null) {
+			for (String filename : boardVo.getFiles()) {
+				boardDao.insertAttach(filename, bno); // tbl_attach에 추가
+			}
 		}
 	}
 
@@ -42,12 +49,20 @@ public class BoardService {
 	@Transactional
 	public void update(BoardVo boardVo) throws Exception {
 		boardDao.update(boardVo);
-		for (String fullname : boardVo.getFiles()) {
-			boardDao.insertAttach(fullname, boardVo.getBno());
+		if (boardVo.getFiles() != null) {
+			for (String fullname : boardVo.getFiles()) {
+				boardDao.insertAttach(fullname, boardVo.getBno());
+			}
 		}
 	}
 
+	@Transactional
 	public void delete(int bno) throws Exception {
+		List<String> fullnames = boardDao.getAttachList(bno);
+		for (String filename : fullnames) {
+			boardDao.deleteAttach(filename);
+			FileuploadUtil.deleteFile(uploadPath, filename);
+		}
 		boardDao.delete(bno);
 	}
 	
