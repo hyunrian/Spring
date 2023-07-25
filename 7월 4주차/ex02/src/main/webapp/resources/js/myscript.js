@@ -46,4 +46,12 @@ function getFormatName(filename) {
 	let formatName = filename.substring(dotIndex + 1); // 확장자
 	return formatName;
 }
+
+function getThumbnailName(fullname) {
+	let slashIndex = fullname.lastIndexOf("/");
+	let front = fullname.substring(0, slashIndex + 1);
+	let back = fullname.substring(slashIndex + 1);
+	let thumbnail = front + "s_" + back;
+	return thumbnail;
+}
 	

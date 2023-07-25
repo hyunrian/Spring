@@ -8,29 +8,25 @@ $(function() {
 	
 	<!-- 첨부파일 리스트 -->
 	$.getJSON("/board/getAttachList/${boardVo.bno}", function(rData) {
-// 		console.log(rData);
-		let index = 0;
+// 		console.log(rData); // 값이 여러개라 배열로 들어옴
+// 		let index = 0; -> $.each에서 index를 받아올 수 있으므로 따로 사용할 필요 없음
 		let filename = [];
-		$.each(rData, function() { // 각각 넘어오는 데이터를 반복적으로 처리
+		$.each(rData, function(index) { // 각각 넘어오는 데이터를 반복적으로 처리. .each일 때 function에 index를 받아올 수 있음
 			div = $("#uploadedItem").clone();
 			div.removeAttr("id").addClass("uploadedItem");
 			filename[index] = 
 				rData[index].toString().substring(rData[index].indexOf("_") + 1);
 			div.find("span").text(filename[index]);
+			div.find("a").hide();
 			if (isImage(filename[index])) {
-				let slashIndex = rData[index].lastIndexOf("/");
-				let front = rData[index].substring(0, slashIndex + 1);
-				let back = rData[index].substring(slashIndex + 1);
-				let thumbnail = front + "s_" + back;
+				let thumbnail = getThumbnailName(rData[index]);
 				div.find("img").attr("src", "/upload/displayImage?thumbnail=" + thumbnail);
 			}
-			index++;
+// 			index++;
 			div.show();
 			$("#uploadedDiv").append(div);
 		});
-		
 	});
-	
 	
 	$("#btnModify").click(function() {
 		<!-- prop: 값이 true/false. 단독으로 사용되는 경우 ex) checked / 그 외: attr  -->

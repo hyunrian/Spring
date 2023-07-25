@@ -34,13 +34,7 @@ $(function() {
 				div.find("span").text(filename);
 				
 				if (isImage(filename)) {
-					let slashIndex = rData.lastIndexOf("/");
-					let front = rData.substring(0, slashIndex + 1);
-					let back = rData.substring(slashIndex + 1);
-					let thumbnail = front + "s_" + back;
-// 					console.log("front", front);
-// 					console.log("back", back);
-// 					console.log("thumbnail", thumbnail);
+					let thumbnail = getThumbnailName(rData);
 					div.find("img").attr("src", "/upload/displayImage?thumbnail=" + thumbnail);
 				}
 				div.find("a").attr("data-filename", rData);
