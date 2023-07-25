@@ -5,6 +5,24 @@
 
 <script>
 $(function() {
+	// 창닫기, 새로고침시 이미 올려진 파일 삭제(비동기로 처리)
+	var nowSubmit = false; // 전송버튼을 클릭하면 true로 변경
+	$(window).bind("beforeunload", function() {
+		if (!nowSubmit) {
+			$(".uploadedItem").find("a").each(function() {
+				var filename = $(this).attr("data-filename")
+				$.ajax({
+					"type" : "delete",
+					"url" : "/upload/deleteAttach",
+					"dataType" : "text",
+					"data" : filename,
+					"success" : function() {
+					}
+				});
+			});
+		}
+	});	
+	
 	$("#uploadDiv").on("dragenter dragover", function(e) { // 영역 안으로 들어올 때 함수 실행
 		e.preventDefault();
 	});
@@ -72,6 +90,7 @@ $(function() {
 	
 	// 폼 전송
 	$("#myform").submit(function() { // 폼을 전송할 때 수행할 코드
+		nowSubmit = true;
 		$(".uploadedItem a").each(function() { // 반복문(for-each)
 			let fullname = $(this).attr("data-filename");
 			console.log(fullname);

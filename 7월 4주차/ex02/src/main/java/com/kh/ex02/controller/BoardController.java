@@ -62,7 +62,7 @@ public class BoardController {
 			PagingDto pagingDto, Model model) throws Exception { 
 		// @RequestParam은 생략해도 가능. 가독성을 위해 사용
 		// value값이 넘어오지 않았다면 defaultValue 적용
-		
+		System.out.println("list!!!");
 		int count = boardService.getCount(pagingDto);
 		
 //		System.out.println("pagingDto:" + pagingDto);

@@ -78,5 +78,4 @@ public class BoardService {
 	public void deleteAttach(String filename) {
 		boardDao.deleteAttach(filename);
 	}
-
 }
