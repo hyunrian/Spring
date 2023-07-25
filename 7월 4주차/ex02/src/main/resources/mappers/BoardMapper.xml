@@ -8,17 +8,11 @@
 		namespace 값은 다른 mapper와 겹치지 않는 이름으로 지어주면 됨.
 		sql 쿼리 id가 중복될 때 namespace로 구분하는 용도
 	 -->
-	 
+
 	<!-- 첨부파일 목록 얻기 -->
 	<select id="getAttachList" resultType="string">
 		select fullname from tbl_attach
 		where bno = #{bno}
-	</select>
-	 
-	<!-- 다음 시퀀스 값 얻기(첨부파일 테이블 추가, 글쓰기에서 활용) -->
-	<select id="getNextSeq" resultType="int">
-		select seq_board_bno.nextval
-		from dual
 	</select>
 	
 	<!-- 첨부파일 테이블에 추가 -->
@@ -26,6 +20,18 @@
 		insert into tbl_attach(fullname, bno)
 		values (#{fullname}, #{bno})
 	</insert>
+	
+	<!-- 첨부파일 테이블에서 삭제 -->
+	<delete id="deleteAttach">
+		delete from tbl_attach
+		where fullname = #{fullname}
+	</delete>
+	 
+	<!-- 다음 시퀀스 값 얻기(첨부파일 테이블 추가, 글쓰기에서 활용) -->
+	<select id="getNextSeq" resultType="int">
+		select seq_board_bno.nextval
+		from dual
+	</select>
 	
 	<!-- 댓글 개수 업데이트 -->
 	<update id="updateReplycnt">

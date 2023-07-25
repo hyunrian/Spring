@@ -75,9 +75,4 @@ public class BoardDao {
 							NAMESPACE + "getAttachList", bno);
 		return list;
 	}
-	
-	// 첨부파일 데이터 삭제
-	public void deleteAttach(String filename) {
-		sqlSession.delete(NAMESPACE + "deleteAttach", filename);
-	}
 }

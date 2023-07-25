@@ -39,12 +39,8 @@ public class BoardService {
 		return boardVo;
 	}
 
-	@Transactional
 	public void update(BoardVo boardVo) throws Exception {
 		boardDao.update(boardVo);
-		for (String fullname : boardVo.getFiles()) {
-			boardDao.insertAttach(fullname, boardVo.getBno());
-		}
 	}
 
 	public void delete(int bno) throws Exception {
@@ -57,11 +53,6 @@ public class BoardService {
 	
 	public List<String> getAttachList(int bno) {
 		return boardDao.getAttachList(bno);
-	}
-	
-	// 첨부파일 데이터 삭제
-	public void deleteAttach(String filename) {
-		boardDao.deleteAttach(filename);
 	}
 
 }

@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+#uploadDiv {
+	width: 80%;
+	height: 100px;
+	background-color: lightpink;
+	margin: 20px auto;
+	border: 2px dashed purple;
+}
+
+/* div는 block-level element. float: left하면 위아래가 아닌 옆으로 배치 */
+.uploadedItem {
+/* 	display: none; */
+ 	float: left;
+ 	width: 150px;
+}

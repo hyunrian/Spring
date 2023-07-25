@@ -91,7 +91,6 @@ public class BoardController {
 	// 수정
 	@RequestMapping(value = "/mod", method = RequestMethod.POST)
 	public String update(BoardVo boardVo) throws Exception {
-		System.out.println("boardVo: " + boardVo);
 		boardService.update(boardVo);
 		return "redirect:/board/read?bno=" + boardVo.getBno();
 	}
@@ -118,5 +117,5 @@ public class BoardController {
 		List<String> list = boardService.getAttachList(bno);
 		return list;
 	}
-	
+
 }

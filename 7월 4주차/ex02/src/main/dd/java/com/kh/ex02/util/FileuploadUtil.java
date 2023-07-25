@@ -10,10 +10,6 @@ import javax.imageio.ImageIO;
 
 import org.imgscalr.Scalr;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 public class FileuploadUtil {
 	// 스프링에서 관리하진 않고, 편의를 위해 만든 클래스
@@ -106,24 +102,6 @@ public class FileuploadUtil {
 		}
 		
 		return dirPath;
-	}
-	
-	// 파일 삭제
-	public static void deleteFile(String uploadPath, String filename) {
-		boolean isImage = FileuploadUtil.isImage(filename);
-		
-		// 이미지 파일이라면 썸네일 이미지 삭제
-		if (isImage) {
-			int slashIndex = filename.lastIndexOf("/");
-			String front = filename.substring(0, slashIndex + 1);
-			String back = filename.substring(slashIndex + 1);
-			String thumbnail = front + "s_" + back;
-			File f = new File(uploadPath + thumbnail);
-			if (f.exists()) f.delete();
-		}
-		// 원본파일 삭제
-		File f = new File(uploadPath + filename);
-		if (f.exists()) f.delete();
 	}
 
 }

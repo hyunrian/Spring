@@ -14,10 +14,10 @@ $(function() {
 		$.each(rData, function(index) { // 각각 넘어오는 데이터를 반복적으로 처리. .each일 때 function에 index를 받아올 수 있음
 			div = $("#uploadedItem").clone();
 			div.removeAttr("id").addClass("uploadedItem");
-			div.find("a").hide().attr("data-filename", rData[index]);
 			filename[index] = 
 				rData[index].toString().substring(rData[index].indexOf("_") + 1);
 			div.find("span").text(filename[index]);
+			div.find("a").hide();
 			if (isImage(filename[index])) {
 				let thumbnail = getThumbnailName(rData[index]);
 				div.find("img").attr("src", "/upload/displayImage?thumbnail=" + thumbnail);
@@ -33,68 +33,6 @@ $(function() {
 		$(".readonly").prop("readonly", false);
 		$("#btnModifyFinish").fadeIn(1000);
 		$(this).fadeOut(1000);
-		
-		// 첨부파일 영역
-		$("#uploadDiv").slideDown(400);
-		
-		// 첨부파일 삭제 링크
-		$(".uploadedItem a").show();
-	});
-	
-	$("#uploadDiv").on("dragenter dragover", function(e) {
-		e.preventDefault();
-	});
-	
-	// 첨부파일 추가
-	$("#uploadDiv").on("drop", function(e) {
-		e.preventDefault();
-		let file = e.originalEvent.dataTransfer.files[0];
-		console.log(file);
-		let formData = new FormData();
-		formData.append("file", file);
-		let url = "/upload/uploadFile";
-		$.ajax({
-			"type" : "post",
-			"processData" : false,
-			"contentType" : false,
-			"data" : formData,
-			"dataType" : "text",
-			"url" : url,
-			"success" : function(rData) {
-				console.log(rData);
-				let div = $("#uploadedItem").clone();
-				div.removeAttr("id").addClass("uploadedItem");
-				div.addClass("newUpload");
-				let filename = rData.substring(rData.indexOf("_") + 1);
-				div.find("span").text(filename);
-				if (isImage(filename)) {
-					let thumbnail = getThumbnailName(rData);
-					div.find("img").attr("src", "/upload/displayImage?thumbnail=" + thumbnail);
-				}
-				div.find("a").attr("data-filename", rData);
-				$("#uploadedDiv").append(div);
-				div.show();
-			}
-		});
-		
-	});
-	
-	// 첨부파일 삭제
-	$("#uploadedDiv").on("click", "a", function(e) {
-		e.preventDefault();
-		let that = $(this);
-		let filename = that.attr("data-filename");
-		console.log(filename);
-		let url = "/upload/deleteAttach";
-		$.ajax({
-			"type" : "delete",
-			"data" : filename,
-			"url" : url,
-			"success" : function(rData) {
-				console.log(rData);
-				that.parent().remove();
-			}
-		});
 	});
 	
 	$(".goToList").click(function(e) {
@@ -291,15 +229,6 @@ $(function() {
 		});
 	});
 	
-	// 폼 전송
-	$("#myform").submit(function() {
-		$(".newUpload").each(function(i) {
-			let html = "<input type='hidden' name='files[" + i + "]' value='";
-			html += $(this).find("a").attr("data-filename") + "'>";
-			$("#myform").prepend(html);
-		});
-	}); 
-	
 	
 });
 </script>
@@ -315,7 +244,7 @@ $(function() {
 				<%-- a링크로 이동 : get방식 --%>
 			</div>
 			<div>
-				<form id="myform" role="form" action="/board/mod" method="post">
+				<form role="form" action="/board/mod" method="post">
 					<input type="hidden" name="bno" value="${boardVo.bno}">
 					<div class="form-group">
 						<label for="title">제목</label> 
@@ -347,14 +276,11 @@ $(function() {
 				</form>									
 			</div><br>
 			
-			<!-- 파일 업로드 공간 -->
-			<div id="uploadDiv" style="display:none;"></div>
-			
 			<!-- 첨부파일 목록 -->
 			<div id="uploadedItem" style="display:none;">
 					<img src="/images/default.png" height="100px"><br>
 					<span>default</span><br>
-					<a href='#'>&times;</a>
+					<a href="#">&times;</a>
 			</div>
 			
 			<!-- 브라우저에서 보일 첨부파일리스트 div -->
