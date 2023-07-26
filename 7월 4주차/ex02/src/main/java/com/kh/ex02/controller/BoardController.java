@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.kh.ex02.dto.PagingDto;
 import com.kh.ex02.service.BoardService;
 import com.kh.ex02.vo.BoardVo;
-import com.kh.ex02.vo.PagingDto;
 
 @Controller
 @RequestMapping("/board") 

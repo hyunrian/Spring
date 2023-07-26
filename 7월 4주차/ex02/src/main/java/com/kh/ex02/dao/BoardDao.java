@@ -8,8 +8,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.ex02.dto.PagingDto;
 import com.kh.ex02.vo.BoardVo;
-import com.kh.ex02.vo.PagingDto;
 
 @Repository
 public class BoardDao {

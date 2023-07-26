@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.ex02.dao.BoardDao;
+import com.kh.ex02.dto.PagingDto;
 import com.kh.ex02.util.FileuploadUtil;
 import com.kh.ex02.vo.BoardVo;
-import com.kh.ex02.vo.PagingDto;
 
 @Service // 서비스에 붙이는 애너테이션
 public class BoardService {
