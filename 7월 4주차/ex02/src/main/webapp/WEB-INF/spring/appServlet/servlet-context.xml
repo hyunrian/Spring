@@ -34,4 +34,13 @@
 		<beans:constructor-arg value="C:/zzz/upload"/>
 	</beans:bean>
 	
+	<!-- 인터셉터 등록 -->
+	<beans:bean id="sampleInterceptor" class="com.kh.ex02.interceptor.SampleInterceptor"/>
+	<interceptors>
+		<interceptor>
+			<mapping path="/doA"/>
+			<mapping path="/doB"/>
+			<beans:ref bean="sampleInterceptor"/>
+		</interceptor>
+	</interceptors>	
 </beans:beans>

@@ -33,5 +33,19 @@ public class HomeController {
 		return "hello";
 	}
 	
+	@RequestMapping(value = "/doA", method = RequestMethod.GET)
+	@ResponseBody
+	public String doA() {
+		System.out.println("doA run");
+		return "doA";
+	}
+	
+	@RequestMapping(value = "/doB", method = RequestMethod.GET)
+	@ResponseBody
+	public String doB() {
+		System.out.println("doB run");
+		return "doB";
+	}
+	
 	
 }
