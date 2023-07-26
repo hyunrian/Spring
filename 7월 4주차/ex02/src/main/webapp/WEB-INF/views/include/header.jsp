@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -236,13 +237,32 @@
 			<div class="sidebar">
 				<!-- Sidebar user panel (optional) -->
 				<div class="user-panel mt-3 pb-3 mb-3 d-flex">
-					<div class="image">
-						<img src="/dist/img/user2-160x160.jpg"
-							class="img-circle elevation-2" alt="User Image">
-					</div>
-					<div class="info">
-						<a href="#" class="d-block">Alexander Pierce</a>
-					</div>
+					<c:choose>
+						<c:when test="${empty loginInfo}">
+							<div class="info">
+								<a href="/user/login" class="btn btn-success" style="margin-left:70px">Login</a>
+							</div>
+						</c:when>
+						<c:otherwise>
+							<div class="info">
+								<div class="d-block">
+									<span class="image">
+										<img src="/dist/img/user2-160x160.jpg"
+											class="img-circle elevation-2" alt="User Image">
+									</span>
+									<span style="color:white;">${loginInfo.u_id}(${loginInfo.u_name})</span>
+									<span class="badge badge-danger navbar-badge">
+										${loginInfo.u_point}
+									</span><br>
+									<div>
+										<a href="/user/logout" class="btn btn-dark" style="margin-left:160px">
+											Logout
+										</a>
+									</div>
+								</div>
+							</div>
+						</c:otherwise>
+					</c:choose>
 				</div>
 
 				<!-- SidebarSearch Form -->

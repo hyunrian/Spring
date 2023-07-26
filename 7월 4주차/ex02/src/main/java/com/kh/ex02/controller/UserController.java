@@ -34,13 +34,26 @@ public class UserController {
 		System.out.println("loginDto:" + loginDto);
 		UserVo userVo = userService.login(loginDto);
 		String returnPage = "redirect:/board/list";
+		
 		if (userVo != null) {
-			session.setAttribute("userVo", userVo);
+			String targetLocation = (String)session.getAttribute("targetLocation");
+			if (targetLocation != null) {
+				returnPage = "redirect:" + targetLocation;
+			}
+			session.removeAttribute("targetLocation");
+			session.setAttribute("loginInfo", userVo);
 		} else {
 			rttr.addFlashAttribute("loginResult", "FAIL");
 			returnPage = "redirect:/user/login";
 		}
 		return returnPage;
+	}
+	
+	// 로그아웃
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout(HttpSession session) {
+		session.invalidate(); // 현재 세션 무효화
+		return "redirect:/user/login";
 	}
 	
 	

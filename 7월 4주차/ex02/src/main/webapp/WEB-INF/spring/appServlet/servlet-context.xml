@@ -36,11 +36,23 @@
 	
 	<!-- 인터셉터 등록 -->
 	<beans:bean id="sampleInterceptor" class="com.kh.ex02.interceptor.SampleInterceptor"/>
+	<beans:bean id="authInterceptor" class="com.kh.ex02.interceptor.AuthInterceptor"/>
+	
 	<interceptors>
 		<interceptor>
 			<mapping path="/doA"/>
 			<mapping path="/doB"/>
 			<beans:ref bean="sampleInterceptor"/>
 		</interceptor>
+		
+		<interceptor>
+			<mapping path="/board/**/*"/> <!-- board의 모든 하위경로 포함 -->
+			<mapping path="/user/**/*"/>
+			<mapping path="/reply/**/*"/>
+			<exclude-mapping path="/board/list"/> <!-- /board/list는 제외하고 적용 -->
+			<exclude-mapping path="/user/login"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
 	</interceptors>	
+	
 </beans:beans>
