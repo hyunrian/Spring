@@ -34,8 +34,11 @@ public class BoardDao {
 		return boardVo;
 	}
 
-	public void update(BoardVo boardVo) throws Exception {
-		sqlSession.update(NAMESPACE + "update", boardVo);
+	public void update(BoardVo boardVo, String u_id) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("boardVo", boardVo);
+		map.put("u_id", u_id);
+		sqlSession.update(NAMESPACE + "update", map);
 	}
 
 	public void delete(int bno) throws Exception {

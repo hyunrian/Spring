@@ -1,10 +1,105 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ include file="/WEB-INF/views/include/header.jsp" %>
 
 <script>
 $(function() {
+
+	var isLiked = false;
+	
+	$.ajax({
+		"type" : "post",
+		"url" : "/like/isLiked/" + ${boardVo.bno},
+		"success" : function(rData) {
+			if (rData == 1) { // 좋아요 했던 페이지일 때
+				$("#likeHeart").attr("style", "font-size:48px; color:red;");
+				isLiked = true;
+			}
+		}
+	});
+	
+// 	$.post("/like/isLiked", function(rData) {
+// 		console.log("페이지 로딩 때 rData:", rData);
+// 		if (rData == 1) { // 좋아요 했던 페이지일 때
+// 			$("#likeHeart").attr("style", "font-size:48px; color:red;");
+// 			isLiked = true;
+// 		}
+// 	});
+	
+	$.post("/like/count/${boardVo.bno}", function(rData) {
+		console.log("좋아요 개수: ", rData);
+		$("#likeHeart").next().text(rData);
+	});
+	
+	// 좋아요
+	$("#likeHeart").click(function() {
+		console.log("heart 클릭됨");
+		let that = $(this);
+		let bno = ${boardVo.bno};
+		$.ajax({
+			"url" : "/like/isLiked/" + bno,
+			"type" : "post",
+			"success" : function(rData) {
+				if (rData == 1) { // 좋아요해놨던 상태일 때
+					let url = "/like/dislike/" + bno;
+					$.ajax ({
+						"url" : url,
+						"type" : "delete",
+						"dataType" : "text",
+						"success" : function(rData) {
+							that.next().text(rData);
+							that.attr("style", "font-size:48px; color:#3399EE;");
+						}
+					});
+				} else { // 좋아요하지 않았던 상태일 때
+					let url = "/like/heart";
+					let bno = ${boardVo.bno};
+					console.log("bno:", bno);
+					$.ajax ({
+						"url" : url,
+						"data" : {"bno" : bno},
+						"type" : "post",
+						"dataType" : "text",
+						"success" : function(rData) {
+							that.next().text(rData);
+							that.attr("style", "font-size:48px; color:red;");
+						}
+					});
+				}
+			}
+		});
+		/*
+		if (!isLiked) { // 좋아요하지 않았던 상태일 때
+			let url = "/like/heart";
+			let bno = ${boardVo.bno};
+			console.log("bno:", bno);
+			$.ajax ({
+				"url" : url,
+				"data" : {"bno" : bno},
+				"type" : "post",
+				"dataType" : "text",
+				"success" : function(rData) {
+// 					console.log(rData);
+					that.attr("style", "font-size:48px; color:red;");
+				}
+			});
+		} else { // 좋아요해놨던 상태일 때
+			let bno = ${boardVo.bno};
+			let url = "/like/dislike/" + bno;
+			$.ajax ({
+				"url" : url,
+				"type" : "delete",
+				"dataType" : "text",
+				"success" : function(rData) {
+					console.log(rData);
+					that.attr("style", "font-size:48px; color:#3399EE;");
+				}
+			});
+		}
+		*/
+	});
 	
 	<!-- 첨부파일 리스트 -->
 	$.getJSON("/board/getAttachList/${boardVo.bno}", function(rData) {
@@ -134,6 +229,11 @@ $(function() {
 				tds.eq(2).text(this.replyer);
 				tds.eq(3).text(toDateString(this.regdate));
 				tds.eq(4).text(toDateString(this.updatedate));
+				
+				if ("${loginInfo.u_id}" != this.replyer) { // 댓글 작성자와 동일한 댓글일 때 수정, 삭제 버튼 보이기
+					tds.eq(5).empty(); // remove -> tds.eq(4)를 삭제, empty -> td 안의 태그를 삭제
+					tds.eq(6).empty();
+				}
 				$("#replyList").append(tr);
 				tr.show();
 			});
@@ -142,12 +242,12 @@ $(function() {
 	
 	getReplyList();
 	
+	// 댓글 입력 버튼
 	$("#btnReplyWrite").click(function() {
 		let url = "/reply/insert";
 		let sData = {
 			"bno" : "${boardVo.bno}",
-			"replytext" : $("#replytext").val(),
-			"replyer" : $("#replyer").val()
+			"replytext" : $("#replytext").val()
 		};
 		
 // 		$.post(url, sData, function(rData) {
@@ -212,9 +312,9 @@ $(function() {
 				let prevText = prevTd.find("input").val();
 				prevTd.text(prevText);
 				
-				let prevTd2 = prevTd.next();
-				let prevWriter = prevTd2.find("input").val();
-				prevTd2.text(prevWriter);
+// 				let prevTd2 = prevTd.next();
+// 				let prevWriter = prevTd2.find("input").val();
+// 				prevTd2.text(prevWriter);
 			}
 			--flag;
 			console.log("flag:" + flag);
@@ -231,9 +331,9 @@ $(function() {
 		let content = replytext.text();
 		replytext.html("<input type='text' value='" + content + "'>");
 		
-		let replywriter = $(this).parent().parent().find("td").eq(2);
-		let name = replywriter.text();
-		replywriter.html("<input type='text' value='" + name + "'>");
+// 		let replywriter = $(this).parent().parent().find("td").eq(2);
+// 		let name = replywriter.text();
+// 		replywriter.html("<input type='text' value='" + name + "'>");
 		
 		let rno = $(this).parent().parent().find("td").eq(0);
 		
@@ -301,6 +401,7 @@ $(function() {
 	}); 
 	
 	
+	
 });
 </script>
 <%@ include file="/WEB-INF/views/include/frmPaging.jsp" %>
@@ -328,22 +429,27 @@ $(function() {
 						<textarea class="form-control readonly" 
 							id="content" name="content" readonly>${boardVo.content}</textarea>
 					</div>
-					<div class="form-group">
-						<label for="writer">작성자</label>
-						<input type="text" class="form-control readonly" 
-							id="writer" name="writer" value="${boardVo.writer}" readonly/>
-					</div>
-					
-					<button type="button" class="btn btn-warning" id="btnModify">
-						수정
-					</button>
-					<button type="submit" class="btn btn-primary" 
-						id="btnModifyFinish" style="display:none;">
-						수정완료
-					</button>
-					<a href="/board/delete?bno=${boardVo.bno}" class="btn btn-danger" id="btnDelete">
-						삭제
-					</a>
+<!-- 					<div class="form-group"> -->
+<!-- 						<label for="writer">작성자</label> -->
+<!-- 						<input type="text" class="form-control readonly"  -->
+<%-- 							id="writer" name="writer" value="${boardVo.writer}" readonly/> --%>
+<!-- 					</div> -->
+
+					<%-- 로그인 사용자 아이디, 작성자 아이디 비교해서 같으면 출력 --%>
+					<c:if test="${loginInfo.u_id == boardVo.writer}">
+						<div>
+							<button type="button" class="btn btn-warning" id="btnModify">
+								수정
+							</button>
+							<button type="submit" class="btn btn-primary" 
+								id="btnModifyFinish" style="display:none;">
+								수정완료
+							</button>
+							<a href="/board/delete?bno=${boardVo.bno}" class="btn btn-danger" id="btnDelete">
+								삭제
+							</a>
+						</div>
+					</c:if>
 				</form>									
 			</div><br>
 			
@@ -364,16 +470,21 @@ $(function() {
 	</div>
 	<br>
 	
-	<h4 style="margin-top:30px">Comments</h4>
+	<!-- 좋아요 -->
+	<div class="text-center">
+		<i class="fa fa-heart" style="font-size:48px;color:#3399EE;
+			cursor:pointer;" id="likeHeart"></i>
+		<span style="font-size:20px;">10</span>
+	</div><br>
+	
+	
+	<h4 style="margin-top:50px">Comments</h4>
+	
 	<!-- 댓글 입력 -->
 	<div class="row">
-		<div class="col-md-8">
+		<div class="col-md-11">
 			<input type="text" class="form-control" placeholder="내용"
 				id="replytext">
-		</div>
-		<div class="col-md-3">
-			<input type="text" class="form-control" placeholder="작성자"
-				id="replyer">
 		</div>
 		<div class="col-md-1">
 			<button type="button" class="btn btn-sm btn-primary"
@@ -403,12 +514,16 @@ $(function() {
 						<td class="replyer"></td>
 						<td></td>
 						<td></td>
-						<td><button type="button" 
+						<td>
+							<button type="button" 
 								class="btn btn-sm btn-warning btn-reply-update">수정</button>
 							<button type="button" style="display:none;"
-								class="btn btn-sm btn-warning btn-reply-update-completed">수정완료</button></td>
-						<td><button type="button" 
-								class="btn btn-sm btn-danger btn-reply-delete">삭제</button></td>
+								class="btn btn-sm btn-warning btn-reply-update-completed">수정완료</button>
+						</td>
+						<td>
+							<button type="button" 
+								class="btn btn-sm btn-danger btn-reply-delete">삭제</button>
+						</td>
 					</tr>
 				</tbody>
 			</table>

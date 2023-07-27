@@ -47,8 +47,8 @@ public class BoardService {
 	}
 
 	@Transactional
-	public void update(BoardVo boardVo) throws Exception {
-		boardDao.update(boardVo);
+	public void update(BoardVo boardVo, String u_id) throws Exception {
+		boardDao.update(boardVo, u_id);
 		if (boardVo.getFiles() != null) {
 			for (String fullname : boardVo.getFiles()) {
 				boardDao.insertAttach(fullname, boardVo.getBno());

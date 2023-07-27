@@ -32,14 +32,14 @@
 						<div class="form-group row">
 							<label for="u_id" class="col-sm-2 col-form-label">아이디</label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control" name="u_id" id="u_id"
+								<input type="text" class="form-control" name="u_id" id="u_id" value="user01"
 									placeholder="ID">
 							</div>
 						</div>
 						<div class="form-group row">
 							<label for="u_pw" class="col-sm-2 col-form-label">패스워드</label>
 							<div class="col-sm-10">
-								<input type="password" class="form-control" name="u_pw"
+								<input type="password" class="form-control" name="u_pw" value="user01"
 									id="u_pw" placeholder="Password">
 							</div>
 						</div>

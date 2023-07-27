@@ -127,11 +127,11 @@ $(function() {
 					<textarea class="form-control" 
 						id="content" name="content"></textarea>
 				</div>
-				<div class="form-group">
-					<label for="writer">작성자</label>
-					<input type="text" class="form-control" 
-						id="writer" name="writer"/>
-				</div>
+<!-- 				<div class="form-group"> -->
+<!-- 					<label for="writer">작성자</label> -->
+<!-- 					<input type="text" class="form-control"  -->
+<!-- 						id="writer" name="writer"/> -->
+<!-- 				</div> -->
 				
 				<!-- 파일 업로드 공간 -->
 				<div id="uploadDiv"></div>

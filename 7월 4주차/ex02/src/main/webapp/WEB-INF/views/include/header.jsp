@@ -35,7 +35,11 @@
 <!-- summernote -->
 <link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
 
+<!-- my css -->
 <link rel="stylesheet" href="/css/mystyle.css"> <!-- resources/css에 추가한 css파일 등록 -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" 
+	integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" 
+	crossorigin="anonymous"> <!-- glyphicons 글리피콘 -->
 
 <!-- jQuery -->
 <script src="/plugins/jquery/jquery.min.js"></script>

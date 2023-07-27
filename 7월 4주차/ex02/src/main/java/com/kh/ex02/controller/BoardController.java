@@ -2,20 +2,21 @@ package com.kh.ex02.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.ex02.dto.PagingDto;
 import com.kh.ex02.service.BoardService;
 import com.kh.ex02.vo.BoardVo;
+import com.kh.ex02.vo.UserVo;
 
 @Controller
 @RequestMapping("/board") 
@@ -30,16 +31,16 @@ public class BoardController {
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	// localhost/board/register
 	public void registGet() { // get방식으로 처리
-		System.out.println("registGet() called");
+//		System.out.println("registGet() called");
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	// localhost/board/register
 	public String registPost(/*MultipartFile file,*/ BoardVo boardVo, 
-			RedirectAttributes rttr) throws Exception { // post방식으로 처리
+			RedirectAttributes rttr, HttpSession session) throws Exception { // post방식으로 처리
 	// 1. getter&setter가 있고 2. jsp에서 설정한 name과 이름이 같으면 자동으로 boardVo 데이터 처리됨
 //		System.out.println("controller, register, file:" + file);
-		System.out.println("controller, register, boardVo:" + boardVo);
+//		System.out.println("controller, register, boardVo:" + boardVo);
 		// form태그로 파일 넘겨받기
 		// model2에서는 파일인 경우와 아닌 경우에 따라 데이터 처리를 따로 설정해야 했지만 
 		// spring에서는 자동으로 모두 처리됨
@@ -50,6 +51,11 @@ public class BoardController {
 //				+ file.getName()); // jsp에서 지정한 name
 //		System.out.println("controller, register, size:" 
 //				+ file.getSize());
+		
+		// 로그인한 사용자의 아이디로 작성자 처리
+		UserVo userVo = (UserVo)session.getAttribute("loginInfo");
+		boardVo.setWriter(userVo.getU_id());
+		
 		boardService.create(boardVo);
 		rttr.addFlashAttribute("msg", "SUCCESS");
 		
@@ -89,9 +95,10 @@ public class BoardController {
 	
 	// 수정
 	@RequestMapping(value = "/mod", method = RequestMethod.POST)
-	public String update(BoardVo boardVo) throws Exception {
+	public String update(BoardVo boardVo, HttpSession session) throws Exception {
 		System.out.println("boardVo: " + boardVo);
-		boardService.update(boardVo);
+		UserVo userVo = (UserVo)session.getAttribute("loginInfo");
+		boardService.update(boardVo, userVo.getU_id());
 		return "redirect:/board/read?bno=" + boardVo.getBno();
 	}
 	
