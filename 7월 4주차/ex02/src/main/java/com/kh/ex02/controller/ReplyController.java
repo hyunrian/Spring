@@ -2,16 +2,19 @@ package com.kh.ex02.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.ex02.commons.MyConstants;
 import com.kh.ex02.service.ReplyService;
 import com.kh.ex02.vo.ReplyVo;
+import com.kh.ex02.vo.UserVo;
 
 @RestController
 @RequestMapping("/reply")
@@ -33,30 +36,33 @@ public class ReplyController {
 	
 	// 입력
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
-	public String insert(@RequestBody ReplyVo replyVo) {
+	public String insert(@RequestBody ReplyVo replyVo, HttpSession session) {
 		// JSON타입 등으로 들어오는 데이터 -> RequestBody 사용
-//		System.out.println("replyVo:" + replyVo);
+		UserVo userVo = (UserVo)session.getAttribute(MyConstants.LOGIN);
+		replyVo.setReplyer(userVo.getU_id());
+		
 		replyService.insert(replyVo);
-		return "success";
+		return MyConstants.LOGIN;
 	}
 	
 	// 수정
 	@RequestMapping(value = "/update", method = RequestMethod.PATCH)
 	// RequestMethod를 post나 get으로 해도 동작은 잘 함
 	// 부분 업데이트 - patch, 전체 업데이트 - put을 보통 사용함
-	public String update(@RequestBody ReplyVo replyVo) {
-//		System.out.println("replyVo:" + replyVo);
+	public String update(@RequestBody ReplyVo replyVo, HttpSession session) {
+		UserVo userVo = (UserVo)session.getAttribute("loginInfo");
+		replyVo.setReplyer(userVo.getU_id());
 		replyService.update(replyVo);
-		return "success";
+		return MyConstants.LOGIN;
 	}
 	
 	// 삭제
 	@RequestMapping(value = "/delete/{rno}/{bno}", method = RequestMethod.DELETE)
 	public String delete(@PathVariable("rno") int rno, 
 						@PathVariable("bno") int bno) {
-		System.out.printf("rno:%d, bno:%d\n", rno, bno);
+//		System.out.printf("rno:%d, bno:%d\n", rno, bno);
 		replyService.delete(rno, bno);
-		return "success";
+		return MyConstants.LOGIN;
 	}
 
 }

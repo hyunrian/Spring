@@ -26,4 +26,11 @@
 		where m_id = #{m_id}
 	</update>
 	
+	<!-- 읽지 않은 메시지 개수 -->
+	<select id="countUnreadMessage" resultType="int">
+		select count(*) from tbl_message
+		where targetid = #{targetid}
+		and opendate is null;
+	</select>
+	
 </mapper>

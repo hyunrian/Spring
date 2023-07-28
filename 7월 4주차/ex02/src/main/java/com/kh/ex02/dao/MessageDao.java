@@ -29,4 +29,9 @@ public class MessageDao {
 		sqlSession.update(NAMESPACE + "updateState", m_id);
 	}
 	
+	// 읽지 않은 메시지 개수 확인
+	public int countUnreadMessage(String targetid) {
+		return sqlSession.selectOne(NAMESPACE + "countUnreadMessage", targetid);
+	}
+	
 }

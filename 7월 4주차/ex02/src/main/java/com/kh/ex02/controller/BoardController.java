@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.kh.ex02.commons.MyConstants;
 import com.kh.ex02.dto.PagingDto;
 import com.kh.ex02.service.BoardService;
 import com.kh.ex02.vo.BoardVo;
@@ -53,7 +54,7 @@ public class BoardController {
 //				+ file.getSize());
 		
 		// 로그인한 사용자의 아이디로 작성자 처리
-		UserVo userVo = (UserVo)session.getAttribute("loginInfo");
+		UserVo userVo = (UserVo)session.getAttribute(MyConstants.LOGIN);
 		boardVo.setWriter(userVo.getU_id());
 		
 		boardService.create(boardVo);
@@ -70,12 +71,10 @@ public class BoardController {
 		// value값이 넘어오지 않았다면 defaultValue 적용
 		int count = boardService.getCount(pagingDto);
 		
-//		System.out.println("pagingDto:" + pagingDto);
 		pagingDto = new PagingDto(
 				pagingDto.getPage(), pagingDto.getPerPage(), count, 
 				pagingDto.getSearchType(), pagingDto.getKeyword());
 		tempDto = pagingDto;
-//		System.out.println("pagingDto:" + pagingDto);
 		List<BoardVo> list = boardService.listAll(pagingDto);
 		model.addAttribute("list", list);
 		model.addAttribute("pagingDto", pagingDto);
@@ -97,7 +96,7 @@ public class BoardController {
 	@RequestMapping(value = "/mod", method = RequestMethod.POST)
 	public String update(BoardVo boardVo, HttpSession session) throws Exception {
 		System.out.println("boardVo: " + boardVo);
-		UserVo userVo = (UserVo)session.getAttribute("loginInfo");
+		UserVo userVo = (UserVo)session.getAttribute(MyConstants.LOGIN);
 		boardService.update(boardVo, userVo.getU_id());
 		return "redirect:/board/read?bno=" + boardVo.getBno();
 	}
@@ -105,17 +104,14 @@ public class BoardController {
 	// 삭제
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String delete(int bno) throws Exception {
-		System.out.println("pagingDto in delete:" + tempDto);
 		boardService.delete(bno);
 		if (tempDto.getKeyword() == null) {
-			System.out.println("null!!!");
 			return "redirect:/board/list";
 		} else {
-			System.out.println("keyword exists");
 			return "redirect:/board/list?page=" + tempDto.getPage() 
-			+ "&perPage=" + tempDto.getPerPage()
-			+ "&searchType=" + tempDto.getSearchType()
-			+ "&keyword=" + tempDto.getKeyword();
+					+ "&perPage=" + tempDto.getPerPage()
+					+ "&searchType=" + tempDto.getSearchType()
+					+ "&keyword=" + tempDto.getKeyword();
 		}
 	}
 	

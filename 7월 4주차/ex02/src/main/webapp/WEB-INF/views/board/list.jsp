@@ -5,6 +5,8 @@
 
 <script>
 $(function() {
+	console.log("loginInfo: ${loginInfo}");
+	
 	var msg = "${msg}";
 	if (msg == "SUCCESS") alert("처리가 완료되었습니다.");
 	
@@ -49,6 +51,34 @@ $(function() {
 		location.href="/board/read?bno=" + bno + "#replyListDiv";
 		// 기능이 완전히 구현된게 아님. 이런 기능이 있다는 것만 일단 알아두자
 	});
+	
+	let targetId = "";
+	let messageSendUrl = "";
+	// 쪽지 보내기
+	$(".sendMessage").click(function(e) {
+		e.preventDefault();
+		$("#modal-415131").trigger("click"); // 클릭이벤트를 발생시킴
+		targetId = $(this).parent().prev().text().trim();
+		$("#messageSpan").text(targetId);
+		messageSendUrl = $(this).attr("href");
+		
+	});
+	
+	// 쪽지 보내기 버튼 클릭
+	$("#btnModalSend").click(function() {
+		let sData = {
+			"targetid" : targetId,
+			"message" : $("#message").val() // textarea의 값은 val로 가져옴
+		};
+		$.post(messageSendUrl, sData, function(rData) {
+			if (rData == "SUCCESS") {
+				$("#btnModalClose").trigger("click");
+				let point = parseInt($("#u_point").text()) + 10;
+				$("#u_point").text(point);
+			}
+		});
+	});
+	
 });
 </script>
 <style>
@@ -66,6 +96,45 @@ $(function() {
 <%@ include file="/WEB-INF/views/include/frmPaging.jsp" %>
 
 <div class="container-fluid">
+
+	<!-- 쪽지보내기 모달창 -->
+	<div class="row">
+		<div class="col-md-12">
+			<a style="display:none;" id="modal-415131" href="#modal-container-415131" role="button" 
+		 		class="btn" data-toggle="modal">modal</a>
+			<div class="modal fade" id="modal-container-415131" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="myModalLabel">
+								쪽지 보내기
+							</h5> 
+							<button type="button" class="close" data-dismiss="modal">
+								<span aria-hidden="true">×</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							받는 사람 : <span id="messageSpan"></span><br><br>
+							<textarea id="message" rows="10" cols="60"></textarea>
+						</div>
+						<div class="modal-footer">
+							 
+							<button type="button" class="btn btn-primary" id="btnModalSend">
+								보내기
+							</button> 
+							<button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnModalClose">
+								닫기
+							</button>
+						</div>
+					</div>
+					
+				</div>
+				
+			</div>
+			
+		</div>
+	</div>
+
 	<div class="row">
 		<div class="col-md-12">
 			<div class="jumbotron">
@@ -146,8 +215,34 @@ $(function() {
 										<span class="badge badge-info"
 											style="cursor:pointer; margin-left:10px;">${boardVo.replycnt}</span>
 									</c:if>
-<%-- 									<td><a class="a_title" href="${boardVo.bno}">${boardVo.title}</a></td> --%>
-									<td>${boardVo.writer}</td>
+									<td>
+										<c:choose>
+											<c:when test="${empty loginInfo}">
+												${boardVo.writer}
+											</c:when>
+											<c:otherwise>
+												<div class="dropdown dropright">
+												    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+												      ${boardVo.writer}
+												    </button>
+												    <c:choose>
+												    	<c:when test="${loginInfo.u_id != boardVo.writer}">
+													    	<div class="dropdown-menu">
+																<a class="dropdown-item sendMessage" href="/message/sendMessage">쪽지 보내기</a>
+																<a class="dropdown-item" href="#">포인트 선물하기</a>
+																<a class="dropdown-item" href="#">회원 정보 보기</a>
+														    </div>
+												    	</c:when>
+												    	<c:otherwise>
+												    		<div class="dropdown-menu">
+																<a class="dropdown-item" href="#">내 정보 보기</a>
+														    </div>
+												    	</c:otherwise>
+												    </c:choose>
+											    </div>
+											</c:otherwise>
+										</c:choose>
+									</td>
 									<td>${boardVo.regdate}</td>
 									<td>${boardVo.viewcnt}</td>
 								</tr>

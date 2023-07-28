@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.ex02.commons.MyConstants;
 import com.kh.ex02.service.BoardService;
 import com.kh.ex02.util.FileuploadUtil;
 
@@ -76,7 +77,7 @@ public class UploadController {
 		FileuploadUtil.deleteFile(uploadPath, filename);
 		boardService.deleteAttach(filename);
 		
-		return "SUCCESS";
+		return MyConstants.LOGIN;
 	}
 	
 }

@@ -40,6 +40,7 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" 
 	integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" 
 	crossorigin="anonymous"> <!-- glyphicons 글리피콘 -->
+<script scr="https://kit.fontawesome.com/77ad8525ff.js" crossorigin="anonymous"></script>
 
 <!-- jQuery -->
 <script src="/plugins/jquery/jquery.min.js"></script>
@@ -78,7 +79,18 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <!-- <script src="/dist/js/pages/dashboard.js"></script> -->
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
 <script src="/js/myscript.js"></script>
+
+<script>
+$(function() {
+	let url = "/message/unread";
+	$.get(url, function(rData) {
+		console.log("unread:", rData);
+	});
+});
+</script>
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -131,8 +143,8 @@
 
 				<!-- Messages Dropdown Menu -->
 				<li class="nav-item dropdown"><a class="nav-link"
-					data-toggle="dropdown" href="#"> <i class="far fa-comments"></i>
-						<span class="badge badge-danger navbar-badge">3</span>
+					data-toggle="dropdown" href="#"> <i class="fa fa-envelope"></i>
+						<span class="badge badge-danger navbar-badge" id="countUnreadMessage">3</span>
 				</a>
 					<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 						<a href="#" class="dropdown-item"> <!-- Message Start -->
@@ -254,8 +266,10 @@
 										<img src="/dist/img/user2-160x160.jpg"
 											class="img-circle elevation-2" alt="User Image">
 									</span>
-									<span style="color:white;">${loginInfo.u_id}(${loginInfo.u_name})</span>
-									<span class="badge badge-danger navbar-badge">
+									<span style="color:white;">
+										${loginInfo.u_id}(${loginInfo.u_name})
+									</span>
+									<span class="badge badge-danger navbar-badge" id="u_point">
 										${loginInfo.u_point}
 									</span><br>
 									<div>

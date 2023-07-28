@@ -12,7 +12,7 @@ public class LikeDao {
 	@Autowired
 	SqlSession sqlSession;
 	
-	private static final String NAMESPACE = "com.kh.ex02.BoardMapper.";
+	private static final String NAMESPACE = "com.kh.ex02.LikeMapper.";
 	
 	public void likeContent(LikeVo likeVo) {
 		sqlSession.insert(NAMESPACE + "likeContent", likeVo);

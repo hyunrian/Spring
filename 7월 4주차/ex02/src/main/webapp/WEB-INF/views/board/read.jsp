@@ -50,7 +50,8 @@ $(function() {
 						"dataType" : "text",
 						"success" : function(rData) {
 							that.next().text(rData);
-							that.attr("style", "font-size:48px; color:#3399EE;");
+// 							that.attr("style", "font-size:48px; color:#3399EE;");
+							that.css("color", "#3399EE");
 						}
 					});
 				} else { // 좋아요하지 않았던 상태일 때
@@ -64,7 +65,8 @@ $(function() {
 						"dataType" : "text",
 						"success" : function(rData) {
 							that.next().text(rData);
-							that.attr("style", "font-size:48px; color:red;");
+// 							that.attr("style", "font-size:48px; color:red;");
+							that.css("color", "red");
 						}
 					});
 				}
@@ -273,7 +275,7 @@ $(function() {
 			"data" : JSON.stringify(sData), // json데이터를 문자열로 변경
 			"success" : function(rData) {
 				console.log(rData);
-				if (rData == "success") {
+				if (rData == "SUCCESS") {
 					$("#replyList").find("tr:gt(0)").remove();
 					// 삭제하지 않으면 계속 append됨
 					getReplyList();
@@ -364,7 +366,7 @@ $(function() {
 			"data" : JSON.stringify(sData), // json데이터를 문자열로 변경
 			"success" : function(rData) {
 				console.log(rData);
-				if (rData == "success") {
+				if (rData == "SUCCESS") {
 					$("#replyList").find("tr:gt(0)").remove();
 					console.log("removed");
 					getReplyList();
@@ -383,7 +385,7 @@ $(function() {
 			"data" : rno,
 			"success" : function(rData) {
 				console.log(rData);
-				if (rData == "success") {
+				if (rData == "SUCCESS") {
 					$("#replyList").find("tr:gt(0)").remove();
 					getReplyList();
 				}
