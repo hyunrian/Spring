@@ -32,6 +32,7 @@ public class MessageController {
 		messageVo.setSender(userVo.getU_id());
 		messageService.SendMessage(messageVo);
 		userVo.setU_point(userVo.getU_point() + MyConstants.SEND_MESSAGE_POINT);
+		session.setAttribute("loginInfo", userVo); // 기존에 저장된 이름과 동일하게 설정하면 덮어쓰기됨
 		// header.jsp에서 point를 세션에 저장된 loginInfo의 값을 가져오고 있기 때문에
 		// userVo 값을 재설정 해줘야 함
 		return MyConstants.SUCCESS_MESSAGE;
