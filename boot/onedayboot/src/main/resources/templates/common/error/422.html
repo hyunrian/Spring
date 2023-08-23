@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<script type="text/javascript" th:inline="javascript">
+	/* <![CDATA[ */
+	var message = /*[[${message}]]*/ 'message'; // controller에서 넣어놓은 값.
+	var loc = /*[[${location}]]*/ 'location'; // 주석처리를 하지 않으면 js 문법에 맞지 않으므로 이렇게 작성해야 함
+	/* ]]> */
+	alert(message);
+	location.href = loc;
+</script>
+</body>
+</html>
